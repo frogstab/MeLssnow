@@ -49,7 +49,7 @@ site:
       subtitle: 沉浸式享受音乐时光
   meting:
     server: kugou
-    id: gcid_3znwo99fz2vz017
+    id: 3znwo99fz2vz017
     br: '128'
     trans: true
   menu:

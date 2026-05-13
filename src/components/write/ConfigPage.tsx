@@ -92,6 +92,8 @@ export function ConfigPage() {
         }
     }, [configContent, mode])
 
+    
+
     const loadConfig = async () => {
         try {
             setLoading(true)
@@ -160,8 +162,9 @@ export function ConfigPage() {
     }
 
     const updateConfigValue = (path: string, value: any) => {
-        if (!parsedConfig) return
-        const newConfig = JSON.parse(JSON.stringify(parsedConfig))
+        const baseConfig = parsedConfig || {}
+        console.log('[ConfigPage] updateConfigValue', path, value)
+        const newConfig = JSON.parse(JSON.stringify(baseConfig))
         const parts = path.split('.')
         let current = newConfig
         for (let i = 0; i < parts.length - 1; i++) {
@@ -170,9 +173,37 @@ export function ConfigPage() {
         }
         current[parts[parts.length - 1]] = value
         setParsedConfig(newConfig)
+        // no localTitleType sync here; UI derives from parsedConfig
         setConfigContent(yaml.dump(newConfig))
         setIsDirty(true)
     }
+
+    const handleSetTitleType = (value: 'image' | 'text') => {
+        const baseConfig = parsedConfig || {}
+        const newConfig = JSON.parse(JSON.stringify(baseConfig))
+        if (!newConfig.site) newConfig.site = {}
+        newConfig.site.title_type = value
+        newConfig.site.titleType = value
+        setParsedConfig(newConfig)
+        setConfigContent(yaml.dump(newConfig))
+        setIsDirty(true)
+    }
+
+    useEffect(() => {
+        // Debug helper: allow calling from page context to directly set title_type
+        ;(window as any).__updateSiteTitleType = (v: 'image' | 'text') => {
+            const baseConfig = parsedConfig || {}
+            const newConfig = JSON.parse(JSON.stringify(baseConfig))
+            if (!newConfig.site) newConfig.site = {}
+            newConfig.site.title_type = v
+            newConfig.site.titleType = v
+            setParsedConfig(newConfig)
+            setConfigContent(yaml.dump(newConfig))
+            setIsDirty(true)
+        }
+        return () => { try { delete (window as any).__updateSiteTitleType } catch (e) {} }
+    }, [parsedConfig])
+
 
     const handleSocialChange = (index: number, field: string, value: any) => {
         const social = [...(parsedConfig?.user?.sidebar?.social || [])]
@@ -670,10 +701,8 @@ export function ConfigPage() {
                                             <div className="h-full flex flex-col justify-between">
                                                 <label className="label"><span className="label-text font-medium">站点标题图片（若选择图片显示）</span></label>
 
-                                                <div className="group relative flex justify-center p-4 md:p-8 bg-base-100 rounded-2xl md:rounded-3xl border border-base-200 shadow-sm hover:shadow-md transition-all duration-300 w-full">
-                                                    <div className="w-40 h-16 md:w-48 md:h-20 rounded-xl md:rounded-2xl overflow-hidden bg-base-200 ring-4 ring-base-100 shadow-xl group-hover:scale-105 transition-transform duration-300 mx-auto p-1 box-border">
-                                                        <img src={parsedConfig?.user?.title_image || parsedConfig?.user?.titleImage || '/logo.png'} alt="Site Title" className="w-full h-full object-contain object-center transform scale-125 transition-transform duration-300" />
-                                                    </div>
+                                                <div className="group relative flex justify-center p-4 md:p-8 bg-base-100 rounded-2xl md:rounded-3xl border border-base-200 shadow-sm hover:shadow-md transition-all duration-300 w-full h-40 md:h-48">
+                                                    <img src={parsedConfig?.user?.title_image || parsedConfig?.user?.titleImage || '/logo.png'} alt="Site Title" className="max-w-full max-h-full object-contain transform scale-125 group-hover:scale-150 transition-transform duration-300" />
                                                 </div>
 
                                                 <div className="mt-2">
@@ -713,26 +742,18 @@ export function ConfigPage() {
 
                                                 <div>
                                                     <label className="label"><span className="label-text text-sm">标题显示方式</span></label>
-                                                    <div className="flex items-center gap-6">
-                                                        <label className="flex items-center gap-2">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="toggle toggle-md toggle-primary"
-                                                                checked={currentTitleType === 'image'}
-                                                                onChange={e => { updateConfigValue('site.title_type', e.target.checked ? 'image' : 'text'); updateConfigValue('site.titleType', e.target.checked ? 'image' : 'text') }}
-                                                            />
-                                                            <span className={`${(currentTitleType === 'image') ? 'text-primary font-medium' : 'text-base-content/70'}`}>图片</span>
-                                                        </label>
 
-                                                        <label className="flex items-center gap-2">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="toggle toggle-md toggle-primary"
-                                                                checked={currentTitleType === 'text'}
-                                                                onChange={e => { updateConfigValue('site.title_type', e.target.checked ? 'text' : 'image'); updateConfigValue('site.titleType', e.target.checked ? 'text' : 'image') }}
-                                                            />
-                                                            <span className={`${(currentTitleType === 'text') ? 'text-primary font-medium' : 'text-base-content/70'}`}>文本</span>
-                                                        </label>
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-2">
+                                                            <label className={`btn btn-sm ${currentTitleType === 'image' ? 'btn-primary shadow-md' : 'btn-ghost text-base-content/60'}`}>
+                                                                <input type="radio" name="siteTitleType" value="image" checked={currentTitleType === 'image'} onChange={() => handleSetTitleType('image')} className="sr-only" />
+                                                                图片
+                                                            </label>
+                                                            <label className={`btn btn-sm ${currentTitleType === 'text' ? 'btn-primary shadow-md' : 'btn-ghost text-base-content/60'}`}>
+                                                                <input type="radio" name="siteTitleType" value="text" checked={currentTitleType === 'text'} onChange={() => handleSetTitleType('text')} className="sr-only" />
+                                                                文本
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

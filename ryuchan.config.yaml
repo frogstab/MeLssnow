@@ -92,11 +92,6 @@ site:
       href: /friend
       svg: material-symbols:supervisor-account-outline-rounded
       target: _self
-    # - id: about
-    #   text: 关于
-    #   href: /about
-    #   svg: material-symbols:info-outline-rounded
-    #   target: _self
   titleType: image
 anime:
   bilibili:
@@ -109,6 +104,10 @@ music:
     - id: '17933567326'
       name: 我的喜欢
       server: netease
+    - id: zhoujielun
+      name: 周杰伦
+      server: netease
+      type: custom
     - id: '17964946766'
       name: 陶喆
       server: netease
@@ -124,16 +123,9 @@ music:
     - id: '17957661244'
       name: 孙燕姿
       server: netease
-    - id: '17957179525'
-      name: LiSA
-      server: netease
     - id: '17966019560'
       name: 告五人
       server: netease
-    - id: 'zhoujl_test'
-      name: 周杰伦测试一下
-      server: netease
-      type: custom
 github:
   owner: kobaridev
   repo: RyuChan

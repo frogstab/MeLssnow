@@ -15,7 +15,7 @@ export default function AboutEditCode({ initialCode }: Props) {
   const { isAuth, setPrivateKey } = useAuthStore()
   const keyInputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-  
+
   const { prefix, suffix, innerContent } = useMemo(() => {
     const match = initialCode.match(/([\s\S]*?<Card[^>]*>\s*)([\s\S]*?)(\s*<\/Card>[\s\S]*)/)
     if (match) {
@@ -34,8 +34,8 @@ export default function AboutEditCode({ initialCode }: Props) {
   const autoResize = useCallback(() => {
     const el = textareaRef.current
     if (el) {
-      el.style.height = 'auto'
-      el.style.height = el.scrollHeight + 'px'
+      el.style.height = '999999px'
+      el.style.height = Math.max(el.scrollHeight, 600) + 'px'
     }
   }, [])
 
@@ -110,18 +110,18 @@ export default function AboutEditCode({ initialCode }: Props) {
                   onClick={handleImportKey}
                   className="btn btn-outline border-base-300 btn-sm rounded-xl hover:bg-base-200 hover:text-base-content"
                 >
-                  <Icon icon="lucide:key" className="w-4 h-4" />添加密钥
+                  <Icon icon="lucide:key" className="w-4 h-4" />导入密钥
                 </button>
               )}
               <a href="/about" className="btn btn-outline border-base-300 btn-sm rounded-xl hover:bg-base-200 hover:text-base-content">
-                 返回
+                返回
               </a>
-              <button 
-                 onClick={handleSave}
-                 disabled={saving}
-                 className="btn btn-primary btn-sm rounded-xl font-medium px-6 shadow-lg shadow-primary/20"
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="btn btn-primary btn-sm rounded-xl font-medium px-6 shadow-lg shadow-primary/20"
               >
-                 {saving ? <span className="loading loading-spinner loading-xs" /> : '保存'}
+                {saving ? <span className="loading loading-spinner loading-xs" /> : '保存'}
               </button>
             </div>
           </div>

@@ -1,7 +1,7 @@
 - name: 网页赞助者
   avatar: /images/projects/avatar-0.png
   description: 我们帮助、呵护、爱怜每一个生命。
-  url: hcl-foundation.pages.dev/
+  url: https://hcl-foundation.pages.dev/
   year: 2026
   tags:
     - 基金会

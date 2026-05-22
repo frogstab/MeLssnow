@@ -4,7 +4,7 @@ site:
   title_type: image
   description: ''
   language: zh
-  favicon: blob:https://www.melssnow.cn/c34a409b-418b-4379-b31b-3a3ab9b54a9f
+  favicon: /favicon.ico
   theme:
     light: garden
     dark: dracula
@@ -109,8 +109,8 @@ user:
   site: https://www.melssnow.cn/
   avatar: /profile.png
   title_image: /logo.png
-  qr_wechat: blob:https://www.melssnow.cn/ca46d079-1cd2-42e8-853f-35ad044f0623
-  qr_alipay: blob:https://www.melssnow.cn/4c8682f4-1479-4446-87d1-507e512bdc71
+  qr_wechat: /WeChat.jpg
+  qr_alipay: /Alipay.jpg
   sidebar:
     social:
       - href: https://github.com/frogstab

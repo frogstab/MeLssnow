@@ -62,16 +62,6 @@ site:
       href: /write
       svg: material-symbols:edit-square-outline-rounded
       target: _self
-    - id: navigation
-      text: 导航
-      href: /navigation
-      svg: material-symbols:explore-outline
-      target: _self
-    - id: anime
-      text: 追番
-      href: /anime
-      svg: material-symbols:movie-outline
-      target: _self
     - id: album
       text: 相册
       href: /album
@@ -142,13 +132,13 @@ user:
         title: BiliBili
         svg: ri:bilibili-line
 comments:
-  enable: false
+  enable: true
   type: giscus
   giscus:
-    repo: kobaridev/gsc
-    repoId: R_kgDOPTM-mA
-    category: General
-    categoryId: DIC_kwDOPTM-mM4CtcFq
+    repo: frogstab/MeLssnow
+    repoId: R_kgDOSkpk5g
+    category: Announcements
+    categoryId: DIC_kwDOSkpk5s4C9mz8
     mapping: pathname
     lang: zh-CN
     inputPosition: top

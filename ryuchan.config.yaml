@@ -90,7 +90,11 @@ anime:
     apiKey: ''
     listId: ''
 music:
-  playlists: []
+  playlists:
+    - id: '2737736648'
+      name: LOFI☂
+      server: netease
+      type: id
 github:
   owner: kobaridev
   repo: RyuChan

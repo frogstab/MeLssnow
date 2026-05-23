@@ -5,9 +5,11 @@ pubDate: 2026-05-23T21:30
 image: >-
   https://origin.picgo.net/2026/05/23/43f0c81479d048c527f16f357ec791f414f5736c51b00371.jpeg
 draft: false
-tags: []
+tags:
+  - 深度学习
 categories:
   - 期末复习
+badge: ''
 ---
 # 什么是深度学习？
 

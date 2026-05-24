@@ -102,7 +102,7 @@ github:
   appId: 在部署端配置环境变量
   encryptKey: wudishiduomejimo
 umami:
-  enable: true
+  enable: false
   baseUrl: https://cloud.umami.is/
   shareId: Hy69sbdZgSCU29Cw
   websiteId: 0bf16fd0-8dc8-45dd-9a39-ead176697043

@@ -103,7 +103,7 @@ github:
   encryptKey: wudishiduomejimo
 umami:
   enable: true
-  baseUrl: https://cloud.umami.is/
+  baseUrl: https://cloud.umami.is
   shareId: LqddXkEvgE2ew1ZA
   websiteId: e94db35e-c9ea-413c-b2a1-79b164b7e81d
   timezone: Asia/Shanghai

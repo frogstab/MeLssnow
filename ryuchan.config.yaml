@@ -104,8 +104,8 @@ github:
 umami:
   enable: true
   baseUrl: https://cloud.umami.is
-  shareId: jIkO5TLrKmDwt0KE
-  websiteId: e94db35e-c9ea-413c-b2a1-79b164b7e81d
+  shareId: U3Wsgr2o14cisCnA
+  websiteId: 98b02dac-c1b3-499e-ac4d-11ea365e5426
   timezone: Asia/Shanghai
 user:
   name: MeLsrain

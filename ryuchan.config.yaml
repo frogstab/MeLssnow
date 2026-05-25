@@ -102,10 +102,10 @@ github:
   appId: 在部署端配置环境变量
   encryptKey: wudishiduomejimo
 umami:
-  enable: false
-  baseUrl: https://cloud.umami.is/
-  shareId: Hy69sbdZgSCU29Cw
-  websiteId: 0bf16fd0-8dc8-45dd-9a39-ead176697043
+  enable: true
+  baseUrl: https://umami-two-sigma-25.vercel.app/
+  shareId: 2Q7xXLJ3l38sdCXL
+  websiteId: 56e13ae2-b5c2-4104-b911-abb177753186
   timezone: Asia/Shanghai
 user:
   name: MeLsrain

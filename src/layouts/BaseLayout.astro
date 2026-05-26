@@ -18,6 +18,7 @@ import Navbar from "@components/Navbar.astro";
 import Banner from "@components/Banner.astro";
 import MobileTOC from "@components/widgets/MobileTOC.astro";
 import GlobalAudio from "@components/widgets/GlobalAudio.astro";
+import Analytics from '@vercel/analytics/astro';
 
 const {
   title,
@@ -127,6 +128,7 @@ const bannerSubtitle = pageConfig?.subtitle || "";
           });
       })();
     </script>
+    <Analytics />
   </head>
 
   <!-- 移除上边距，让Banner从顶部开始 -->

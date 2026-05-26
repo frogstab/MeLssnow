@@ -30,7 +30,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@swup/astro": "^1.6.0",
     "@tailwindcss/typography": "^0.5.16",
-    "@vercel/analytics": "^2.0.1",
     "astro": "^5.9.0",
     "astro-icon": "^1.1.5",
     "astro-iconify": "^1.2.0",

@@ -98,7 +98,7 @@ const bannerSubtitle = pageConfig?.subtitle || "";
         const prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)",
         ).matches;
-        
+
         let theme;
         if (storedTheme) {
           theme = storedTheme;
@@ -108,7 +108,7 @@ const bannerSubtitle = pageConfig?.subtitle || "";
         }
         document.documentElement.setAttribute("data-theme", theme);
         document.documentElement.setAttribute("data-banner-mode", storedBannerMode);
-        
+
         const isDark = theme === SITE_THEME.dark || ['dark', 'synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'business', 'night', 'coffee'].includes(theme);
         const themeType = isDark ? "dark" : "light";
         document.documentElement.setAttribute("data-theme-type", themeType);
@@ -128,6 +128,7 @@ const bannerSubtitle = pageConfig?.subtitle || "";
           });
       })();
     </script>
+    <Analytics />
   </head>
 
   <!-- 移除上边距，让Banner从顶部开始 -->
@@ -169,14 +170,14 @@ const bannerSubtitle = pageConfig?.subtitle || "";
       document.addEventListener("astro:after-swap", () => {
         const storedTheme = localStorage.getItem("theme");
         const storedBannerMode = localStorage.getItem("banner-mode") || "normal";
-        
+
         if (storedTheme) {
           document.documentElement.setAttribute("data-theme", storedTheme);
           const isDark = storedTheme === SITE_THEME.dark || ['dark', 'synthwave', 'halloween', 'forest', 'black', 'luxury', 'dracula', 'business', 'night', 'coffee'].includes(storedTheme);
           const themeType = isDark ? "dark" : "light";
           document.documentElement.setAttribute("data-theme-type", themeType);
         }
-        
+
         document.documentElement.setAttribute("data-banner-mode", storedBannerMode);
       });
     </script>

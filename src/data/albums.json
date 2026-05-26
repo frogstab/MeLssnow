@@ -80,5 +80,47 @@
         "variant": "1x1"
       }
     ]
+  },
+  {
+    "id": "36715842",
+    "date": "2026-05-26",
+    "event": "时间序列四、五章计算题",
+    "title": "图片按时间序列排序（doge",
+    "description": "时间序列四、五章计算题汇总",
+    "icon": "📷",
+    "photos": [
+      {
+        "src": "https://origin.picgo.net/2026/05/26/4-82e697eb64a8d06da4.jpg",
+        "variant": "9x16"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/4-94f8d14f72800956e0.jpg",
+        "variant": "4x5"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/4-8628ccc78338b3a0ad.jpg",
+        "variant": "9x16"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/4-9002bb21cdd5518eb6.jpg",
+        "variant": "9x16"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/5-2078566fd4e152dcfd.jpg",
+        "variant": "4x5"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/5-159e30987727983496.jpg",
+        "variant": "4x3"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/5-4574b53e5b854e9f9d.jpg",
+        "variant": "1x1"
+      },
+      {
+        "src": "https://origin.picgo.net/2026/05/26/5-46f18d689b40923493.jpg",
+        "variant": "4x3"
+      }
+    ]
   }
 ]

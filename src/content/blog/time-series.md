@@ -37,42 +37,35 @@ badge: ''
 </head>
 <body>
     <canvas id="redVoidCanvas" width="800" height="600" style="width:100%; height:auto; aspect-ratio:800/600; background: transparent;"></canvas>
-
     <script>
         (function() {
             const canvas = document.getElementById('redVoidCanvas');
             let ctx = canvas.getContext('2d');
-
             // 窟窿几何
             let width, height;
             let centerX, centerY;
             let baseRadius = 210;
             let noiseAmp = 32;
             const VERTEX_COUNT = 36;
-
             // 粒子系统 —— 01序列残影效果
             const PARTICLE_COUNT = 180;       // 粒子数量适中，残影密集但清晰
             const SPEED_MIN = 110;             // 像素/秒
             const SPEED_MAX = 210;
             const FONT_MIN = 16;
             const FONT_MAX = 26;
-
             let currentPolygonPoints = [];
             let particles = [];
             let globalTime = 0;
             let lastFrame = 0;
             let animationId = null;
-
             function randomRange(min, max) {
                 return min + Math.random() * (max - min);
             }
-
             // 不规则多边形 (窟窿边缘)
             function generateIrregularHole(cx, cy, radius, timeSeed, pointsCount = VERTEX_COUNT) {
                 const points = [];
                 const step = (Math.PI * 2) / pointsCount;
                 const t = timeSeed * 0.0025;
-
                 for (let i = 0; i < pointsCount; i++) {
                     const angle = i * step;
                     let rFactor = 1.0;
@@ -81,20 +74,17 @@ badge: ''
                     rFactor += Math.cos(angle * 2.7 - t * 0.85) * 0.1;
                     rFactor += Math.sin(angle * 13 + t * 2.2) * 0.06;
                     rFactor += Math.cos(angle * 1.6 + t * 0.7) * 0.07;
-
                     let finalR = radius * rFactor;
                     const dynamicNoise = noiseAmp * (0.7 + Math.sin(t * 0.65) * 0.25);
                     finalR += Math.sin(angle * 7 + t * 1.2) * dynamicNoise * 0.5;
                     finalR += Math.cos(angle * 14 - t) * (dynamicNoise * 0.4);
                     finalR = Math.max(radius * 0.62, Math.min(radius * 1.28, finalR));
-
                     const px = cx + finalR * Math.cos(angle);
                     const py = cy + finalR * Math.sin(angle);
                     points.push({ x: px, y: py });
                 }
                 return points;
             }
-
             function polygonToPath(points) {
                 if (!points || points.length < 3) return null;
                 const path = new Path2D();
@@ -103,7 +93,6 @@ badge: ''
                 path.closePath();
                 return path;
             }
-
             function isPointInPolygon(px, py, points) {
                 if (!points || points.length < 3) return false;
                 let inside = false;
@@ -116,7 +105,6 @@ badge: ''
                 }
                 return inside;
             }
-
             function getPolygonBBox(points) {
                 let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
                 for (let p of points) {
@@ -127,7 +115,6 @@ badge: ''
                 }
                 return { minX, maxX, minY, maxY };
             }
-
             function randomPointInPolygonUniform(points) {
                 if (!points || points.length === 0) return { x: centerX, y: centerY };
                 const bbox = getPolygonBBox(points);
@@ -138,7 +125,6 @@ badge: ''
                 }
                 return { x: points[0].x, y: points[0].y };
             }
-
             function randomTopPointInPolygon(points) {
                 if (!points || points.length === 0) return { x: centerX, y: centerY };
                 const bbox = getPolygonBBox(points);
@@ -151,7 +137,6 @@ badge: ''
                 }
                 return randomPointInPolygonUniform(points);
             }
-
             // 粒子类：包含残影绘制（01序列垂直拖尾）
             class RedRainParticle {
                 constructor(x, y, speed, char, fontSize) {
@@ -163,24 +148,20 @@ badge: ''
                     this.opacity = randomRange(0.8, 1.0);
                     this.driftX = randomRange(-0.2, 0.2);
                 }
-
                 update(deltaSeconds) {
                     this.y += this.speed * deltaSeconds;
                     this.x += this.driftX * 0.5 * deltaSeconds;
                 }
-
                 // 绘制当前粒子 + 其身后的残影序列（01字符沿垂直方向排列）
                 draw(ctx) {
                     ctx.save();
                     // 文字对齐中心，保证残影严格垂直
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    
                     // 动态计算残影数量：速度越快残影越多且间距越大 (3~7个)
                     const speedFactor = Math.min(1.2, (this.speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN));
                     const ghostCount = Math.floor(4 + speedFactor * 4);   // 4~8个残影
                     const stepY = 6 + speedFactor * 8;                    // 残影间距 (像素)
-                    
                     // 先绘制残影序列（从近到远，越往下透明度越低，字体稍小）
                     for (let i = 1; i <= ghostCount; i++) {
                         const ghostY = this.y - i * stepY;      // 残影在粒子正上方（历史位置），形成垂直拖尾
@@ -188,34 +169,28 @@ badge: ''
                         const ghostOpacity = this.opacity * (1 - i / (ghostCount + 1)) * 0.6;
                         const ghostSize = this.fontSize * (1 - i * 0.08);
                         if (ghostSize < 8) continue;
-                        
                         ctx.shadowBlur = i === 1 ? 8 : 4;
                         ctx.shadowColor = "#ff2060";
                         ctx.fillStyle = `rgba(255, 50, 90, ${ghostOpacity})`;
                         ctx.font = `${Math.floor(ghostSize)}px "Courier New", monospace`;
                         ctx.fillText(this.char, this.x, ghostY);
-                        
                         // 残影微光晕 (二次模糊)
                         ctx.fillStyle = `rgba(255, 80, 120, ${ghostOpacity * 0.5})`;
                         ctx.fillText(this.char, this.x, ghostY - 1);
                     }
-                    
                     // 绘制当前主字符（最亮最清晰）
                     ctx.shadowBlur = 12;
                     ctx.shadowColor = "#ff3060";
                     ctx.fillStyle = `rgba(255, 45, 85, ${this.opacity})`;
                     ctx.font = `${this.fontSize}px "Courier New", monospace`;
                     ctx.fillText(this.char, this.x, this.y);
-                    
                     // 主字符下方额外微弱光晕（增强坠落感）
                     ctx.shadowBlur = 6;
                     ctx.fillStyle = `rgba(255, 30, 70, 0.3)`;
                     ctx.fillText(this.char, this.x, this.y + 2);
-                    
                     ctx.restore();
                 }
             }
-
             function initParticles(polygonPoints) {
                 const newParticles = [];
                 for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -227,7 +202,6 @@ badge: ''
                 }
                 return newParticles;
             }
-
             function resetOutOfBoundsParticles(particlesArr, polygonPoints, canvasH, canvasW) {
                 if (!polygonPoints || polygonPoints.length === 0) return;
                 for (let i = 0; i < particlesArr.length; i++) {
@@ -236,7 +210,6 @@ badge: ''
                     if (p.y > canvasH + 80 || p.y < -80) needReset = true;
                     else if (p.x < -100 || p.x > canvasW + 100) needReset = true;
                     else if (!isPointInPolygon(p.x, p.y, polygonPoints)) needReset = true;
-                    
                     if (needReset) {
                         const newPos = randomTopPointInPolygon(polygonPoints);
                         p.x = newPos.x;
@@ -249,12 +222,10 @@ badge: ''
                     }
                 }
             }
-
             function updateParticles(particlesArr, deltaSeconds) {
                 const safeDelta = Math.min(deltaSeconds, 0.033);
                 for (let p of particlesArr) p.update(safeDelta);
             }
-
             // 渲染窟窿内部（黑色背景 + 01序列雨滴）
             function renderVoidInside(ctx, particlesArr, polygonPoints, w, h) {
                 if (!polygonPoints.length) return;
@@ -262,26 +233,21 @@ badge: ''
                 const clipPath = polygonToPath(polygonPoints);
                 if (!clipPath) { ctx.restore(); return; }
                 ctx.clip(clipPath, 'evenodd');
-                
                 // 深邃黑色背景 + 极弱红色辐射
                 const innerGrad = ctx.createRadialGradient(centerX - 18, centerY - 20, 15, centerX, centerY, baseRadius * 0.75);
                 innerGrad.addColorStop(0, '#0a0002');
                 innerGrad.addColorStop(1, '#000000');
                 ctx.fillStyle = innerGrad;
                 ctx.fillRect(0, 0, w, h);
-                
                 // 稀疏红色噪点
                 ctx.fillStyle = "rgba(255, 50, 85, 0.04)";
                 for (let i = 0; i < 60; i++) {
                     if (Math.random() > 0.97) ctx.fillRect(Math.random() * w, Math.random() * h, 1.5, 1);
                 }
-                
                 // 绘制所有粒子（每个粒子自带残影序列）
                 for (let p of particlesArr) p.draw(ctx);
-                
                 ctx.restore();
             }
-            
             // 窟窿边缘红色光晕 (仅保留轮廓和内部流光，移除所有刺芒/短线)
             function drawRedEdgeGlow(ctx, points, time) {
                 if (!points || points.length < 3) return;
@@ -305,7 +271,6 @@ badge: ''
                 // 注意：不再绘制任何向外延伸的短线或刺芒，彻底清除接缝处的转动线条
                 ctx.restore();
             }
-            
             function resizeAndSetup() {
                 const rect = canvas.getBoundingClientRect();
                 width = rect.width;
@@ -318,12 +283,10 @@ badge: ''
                 baseRadius = Math.min(minSide * 0.38, 280);
                 baseRadius = Math.max(baseRadius, 128);
                 noiseAmp = Math.min(38, baseRadius * 0.2);
-                
                 const initPoly = generateIrregularHole(centerX, centerY, baseRadius, 0, VERTEX_COUNT);
                 currentPolygonPoints = initPoly;
                 particles = initParticles(currentPolygonPoints);
             }
-            
             function animate(nowMs) {
                 if (!ctx) return;
                 let deltaTimeSec = 0.016;
@@ -331,22 +294,16 @@ badge: ''
                 if (deltaTimeSec <= 0) deltaTimeSec = 0.016;
                 lastFrame = nowMs;
                 globalTime = nowMs;
-                
                 const shapeTime = globalTime * 0.0022;
                 currentPolygonPoints = generateIrregularHole(centerX, centerY, baseRadius, shapeTime, VERTEX_COUNT);
-                
                 updateParticles(particles, deltaTimeSec);
                 resetOutOfBoundsParticles(particles, currentPolygonPoints, height, width);
-                
                 ctx.clearRect(0, 0, width, height);
                 renderVoidInside(ctx, particles, currentPolygonPoints, width, height);
                 drawRedEdgeGlow(ctx, currentPolygonPoints, globalTime);
-                
                 animationId = requestAnimationFrame(animate);
             }
-            
             window.addEventListener('resize', () => resizeAndSetup());
-            
             function start() {
                 resizeAndSetup();
                 lastFrame = performance.now();

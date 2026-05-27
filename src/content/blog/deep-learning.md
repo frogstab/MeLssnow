@@ -11,6 +11,202 @@ categories:
   - 期末复习
 badge: ''
 ---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>深度学习词汇球体 | 平滑过渡版</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0a0a0f;
+            font-family: 'Courier New', 'Fira Code', 'Monaco', monospace;
+        }
+        .css2d-object {
+            pointer-events: none;
+            user-select: none;
+        }
+        .dl-word {
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-weight: bold;
+            white-space: nowrap;
+            text-align: center;
+            line-height: 1;
+            transition: none; /* 完全由JS实时更新，无过渡延迟 */
+        }
+    </style>
+</head>
+<body>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+        // --- 初始化场景、相机、渲染器 ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0a0a0f);
+        const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.2, 5.5);
+        camera.lookAt(0, 0, 0);
+        const labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.left = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
+        // --- 轨道控制 (支持用户交互) ---
+        const controls = new OrbitControls(camera, labelRenderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.enableZoom = true;
+        controls.enablePan = false;
+        controls.autoRotate = false;
+        controls.target.set(0, 0, 0);
+        // --- 深度学习词汇库 ---
+        const dlTerms = [
+            "AI", "CNN", "RNN", "GAN", "LSTM", "BERT", "GPT", "MLP", "ReLU",
+            "SVM", "PCA", "SGD", "Adam", "Dropout", "BN", "Attention", "Transformer",
+            "ViT", "ResNet", "YOLO", "SSD", "FCN", "UNet", "DQN", "PPO",
+            "VAE", "DDPM", "MoE", "NLP", "CV", "RL", "DL", "ML", "BP", "GNN",
+            "GCN", "KNN", "HMM", "CRF", "Word2Vec", "GloVe", "ELMo", "T5",
+            "XLNet", "RoBERTa", "DistilBERT", "CLIP", "DALL·E", "StableDiffusion",
+            "Reinforce", "A3C", "TD3", "SAC", "NeRF", "StyleGAN", "BigGAN",
+            "EfficientNet", "MobileNet", "ShuffleNet", "Inception", "Xception",
+            "MaskRCNN", "RetinaNet", "CenterNet", "DeepLab", "FastRCNN", "FasterRCNN",
+            "YOLACT", "SOLO", "FCOS", "CornerNet", "ViLBERT", "LXMERT", "UNITER",
+            "ALBERT", "ELECTRA", "DeBERTa", "Longformer", "BigBird", "LayoutLM",
+            "BEiT", "MAE", "SimCLR", "MoCo", "BYOL", "SwAV", "DINO", "iGPT",
+            "VQVAE", "NVAE", "ScoreSDE", "DDIM", "PNDM", "LatentDiffusion", "Mamba",
+            "RWKV", "GLM", "ChatGLM", "LLaMA", "Falcon", "Mistral", "Gemma"
+        ];
+        const radius = 2.3;
+        const pointCount = 680;
+        // Fibonacci 球体均匀分布
+        function fibonacciSpherePoints(n, r) {
+            const points = [];
+            const phiGolden = Math.PI * (3 - Math.sqrt(5));
+            for (let i = 0; i < n; i++) {
+                const y = 1 - (i / (n - 1)) * 2;
+                const radiusAtY = Math.sqrt(1 - y*y);
+                const theta = i * phiGolden * 2;
+                const x = Math.cos(theta) * radiusAtY;
+                const z = Math.sin(theta) * radiusAtY;
+                const pos = new THREE.Vector3(x, y, z).normalize().multiplyScalar(r);
+                points.push(pos);
+            }
+            return points;
+        }
+        const positions = fibonacciSpherePoints(pointCount, radius);
+        const wordGroup = new THREE.Group();
+        scene.add(wordGroup);
+        // 存储标签元素及原始方向向量
+        const labelItems = [];
+        // 颜色插值：从正面亮米白 (rgb(255, 224, 181)) 到背面深褐 (rgb(90, 58, 40))
+        const frontColorRGB = { r: 255, g: 224, b: 181 };
+        const backColorRGB  = { r: 90,  g: 58,  b: 40 };
+        // 字体大小范围：正面最大26px，背面最小12px
+        const maxFontSize = 26;
+        const minFontSize = 12;
+        // 透明度范围：正面完全不透明 1.0，背面半透明 0.45
+        const maxOpacity = 1.0;
+        const minOpacity = 0.45;
+        positions.forEach((pos, idx) => {
+            const term = dlTerms[Math.floor(Math.random() * dlTerms.length)];
+            const div = document.createElement('div');
+            div.textContent = term;
+            div.className = 'dl-word';
+            div.style.fontWeight = 'bold';
+            div.style.whiteSpace = 'nowrap';
+            // 初始样式 (会被动画实时覆盖)
+            div.style.fontSize = `${maxFontSize}px`;
+            div.style.opacity = maxOpacity;
+            div.style.color = `rgb(${frontColorRGB.r}, ${frontColorRGB.g}, ${frontColorRGB.b})`;
+            const label = new CSS2DObject(div);
+            label.position.copy(pos);
+            wordGroup.add(label);
+            // 保存原始方向（归一化向量）
+            const originalDir = pos.clone().normalize();
+            labelItems.push({
+                label: label,
+                originalDir: originalDir,
+                div: div
+            });
+        });
+        // 辅助向量
+        const toCamera = new THREE.Vector3();
+        const currentDir = new THREE.Vector3();
+        // 旋转速度
+        const rotateSpeed = 0.005;
+        // 动画循环：连续插值
+        function animate() {
+            requestAnimationFrame(animate);
+            // 球体自转
+            wordGroup.rotation.y += rotateSpeed;
+            wordGroup.rotation.x += 0.0008;
+            // 更新相机控制
+            controls.update();
+            // 获取相机位置 (世界坐标)
+            const cameraPos = camera.getWorldPosition(new THREE.Vector3());
+            // 球心在世界原点 (因为wordGroup位置为(0,0,0))
+            const sphereCenter = new THREE.Vector3(0, 0, 0);
+            toCamera.subVectors(cameraPos, sphereCenter).normalize();
+            // 对每个文字，计算当前方向 (应用 group 旋转) 与 toCamera 的点积
+            labelItems.forEach(item => {
+                // 原始方向乘以 group 的四元数得到当前世界方向
+                currentDir.copy(item.originalDir).applyQuaternion(wordGroup.quaternion);
+                const dot = currentDir.dot(toCamera);
+                // dot 范围 [-1, 1]， -1 完全背向，1 完全面向相机
+                // 使用 easeOutCubic 映射使过渡更平滑，但线性就已经很好
+                // 将 dot 从 [-1,1] 映射到 [0,1]，其中 1 表示完全正面
+                const t = (dot + 1) / 2;  // 0=背面，1=正面
+                // 可选：使用平滑曲线，使中间过渡更柔和
+                const smoothT = t * t * (3 - 2 * t);  // smoothstep  easing
+                // 插值字体大小
+                const fontSize = minFontSize + (maxFontSize - minFontSize) * smoothT;
+                // 插值透明度
+                const opacity = minOpacity + (maxOpacity - minOpacity) * smoothT;
+                // 插值颜色
+                const r = Math.floor(backColorRGB.r + (frontColorRGB.r - backColorRGB.r) * smoothT);
+                const g = Math.floor(backColorRGB.g + (frontColorRGB.g - backColorRGB.g) * smoothT);
+                const b = Math.floor(backColorRGB.b + (frontColorRGB.b - backColorRGB.b) * smoothT);
+                // 应用样式
+                item.div.style.fontSize = `${Math.round(fontSize)}px`;
+                item.div.style.opacity = opacity;
+                item.div.style.color = `rgb(${r}, ${g}, ${b})`;
+                // 高光正面可加轻微阴影，背面无阴影
+                if (smoothT > 0.7) {
+                    item.div.style.textShadow = '0 0 4px rgba(255, 200, 120, 0.5)';
+                } else {
+                    item.div.style.textShadow = 'none';
+                }
+            });
+            labelRenderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', onWindowResize);
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        console.log('深度学习词汇球体 | 平滑过渡模式 (基于点积连续插值)');
+    </script>
+</body>
+</html>
+
+
 # 什么是深度学习？
 
 深度学习是机器学习的一个分支，其核心思想是利用构建和训练**人工神经网络**来模拟人脑**处理信息的方式**，从数据中自动**提取特征**并**进行决策**，来解决复杂的**模式识别**和**预测问题**。深度学习在**计算机视觉**、**自然语言处理**等领域有广泛应用。

@@ -8,6 +8,7 @@ tags:
   - 时间序列
 categories:
   - 期末复习
+badge: ''
 ---
 # 第一章 时间序列分析概述
 
@@ -306,7 +307,8 @@ ADF检验基于以下三种回归模型：
 
 - **乘法季节 $ARIMA(p,d,q)×(P,D,Q)_s$ 模型**定义为：
 
-  $$$\phi(B)\Phi(B)\nabla^d \nabla_s^D X_t = \theta(B)\Theta(B)\varepsilon_t$$
-  其中：
+  $$\phi(B)\Phi(B)\nabla^d \nabla_s^D X_t = \theta(B)\Theta(B)\varepsilon_t$$
+
+其中：
   - $\nabla^d = (1-B)^d$ 为 $d$ 阶差分，$\nabla_s^D = (1-B^s)^D$ 为 $D$ 阶季节差分；
   - $\nabla^d \nabla_s^D X_t$ 为经过差分和季节差分后的平稳序列，该序列服从$SARMA(p,q)×(P,Q)_s$ 模型。

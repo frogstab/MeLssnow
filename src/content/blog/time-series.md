@@ -14,8 +14,8 @@ badge: ''
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>红色窟窿 · 深邃内影 | 01序列血雨</title>
     <style>
         body {
             margin: 0;
@@ -41,18 +41,22 @@ badge: ''
         (function() {
             const canvas = document.getElementById('redVoidCanvas');
             let ctx = canvas.getContext('2d');
-            // 窟窿几何
+            // 窟窿几何参数 (横向拉长: 长 > 宽)
             let width, height;
             let centerX, centerY;
-            let baseRadius = 210;
-            let noiseAmp = 32;
-            const VERTEX_COUNT = 36;
-            // 粒子系统 —— 01序列残影效果
-            const PARTICLE_COUNT = 180;       // 粒子数量适中，残影密集但清晰
-            const SPEED_MIN = 110;             // 像素/秒
-            const SPEED_MAX = 210;
-            const FONT_MIN = 16;
-            const FONT_MAX = 26;
+            let baseRadiusX = 230;    // 横向半径（长）
+            let baseRadiusY = 155;    // 纵向半径（短）
+            let noiseAmp = 28;
+            const VERTEX_COUNT = 44;   // 边缘细节
+            // 粒子系统（移动端优化）
+            let PARTICLE_COUNT = 85;
+            const SPEED_MIN = 100;
+            const SPEED_MAX = 190;
+            const FONT_MIN = 14;
+            const FONT_MAX = 22;
+            if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                PARTICLE_COUNT = 65;
+            }
             let currentPolygonPoints = [];
             let particles = [];
             let globalTime = 0;
@@ -61,26 +65,30 @@ badge: ''
             function randomRange(min, max) {
                 return min + Math.random() * (max - min);
             }
-            // 不规则多边形 (窟窿边缘)
-            function generateIrregularHole(cx, cy, radius, timeSeed, pointsCount = VERTEX_COUNT) {
+            // 生成横向拉长的不规则多边形（椭圆基底 + 扰动）
+            function generateEllipseHole(cx, cy, radX, radY, timeSeed, pointsCount = VERTEX_COUNT) {
                 const points = [];
                 const step = (Math.PI * 2) / pointsCount;
-                const t = timeSeed * 0.0025;
+                const t = timeSeed * 0.0022;
                 for (let i = 0; i < pointsCount; i++) {
                     const angle = i * step;
                     let rFactor = 1.0;
-                    rFactor += Math.sin(angle * 4.1 + t) * 0.13;
-                    rFactor += Math.sin(angle * 9.3 + t * 1.4) * 0.09;
-                    rFactor += Math.cos(angle * 2.7 - t * 0.85) * 0.1;
-                    rFactor += Math.sin(angle * 13 + t * 2.2) * 0.06;
-                    rFactor += Math.cos(angle * 1.6 + t * 0.7) * 0.07;
-                    let finalR = radius * rFactor;
-                    const dynamicNoise = noiseAmp * (0.7 + Math.sin(t * 0.65) * 0.25);
+                    rFactor += Math.sin(angle * 4.3 + t) * 0.13;
+                    rFactor += Math.sin(angle * 9.7 + t * 1.4) * 0.09;
+                    rFactor += Math.cos(angle * 2.5 - t * 0.9) * 0.1;
+                    rFactor += Math.sin(angle * 12 + t * 2.2) * 0.06;
+                    rFactor += Math.cos(angle * 1.8 + t * 0.7) * 0.07;
+                    const cosA = Math.cos(angle);
+                    const sinA = Math.sin(angle);
+                    const invR2 = (cosA * cosA) / (radX * radX) + (sinA * sinA) / (radY * radY);
+                    let ellipseR = 1 / Math.sqrt(invR2);
+                    let finalR = ellipseR * rFactor;
+                    const dynamicNoise = noiseAmp * (0.7 + Math.sin(t * 0.6) * 0.25);
                     finalR += Math.sin(angle * 7 + t * 1.2) * dynamicNoise * 0.5;
-                    finalR += Math.cos(angle * 14 - t) * (dynamicNoise * 0.4);
-                    finalR = Math.max(radius * 0.62, Math.min(radius * 1.28, finalR));
-                    const px = cx + finalR * Math.cos(angle);
-                    const py = cy + finalR * Math.sin(angle);
+                    finalR += Math.cos(angle * 13 - t) * (dynamicNoise * 0.4);
+                    finalR = Math.max(ellipseR * 0.68, Math.min(ellipseR * 1.28, finalR));
+                    const px = cx + finalR * cosA;
+                    const py = cy + finalR * sinA;
                     points.push({ x: px, y: py });
                 }
                 return points;
@@ -118,7 +126,7 @@ badge: ''
             function randomPointInPolygonUniform(points) {
                 if (!points || points.length === 0) return { x: centerX, y: centerY };
                 const bbox = getPolygonBBox(points);
-                for (let attempt = 0; attempt < 80; attempt++) {
+                for (let attempt = 0; attempt < 70; attempt++) {
                     const randX = randomRange(bbox.minX, bbox.maxX);
                     const randY = randomRange(bbox.minY, bbox.maxY);
                     if (isPointInPolygon(randX, randY, points)) return { x: randX, y: randY };
@@ -130,14 +138,14 @@ badge: ''
                 const bbox = getPolygonBBox(points);
                 const topBound = bbox.minY;
                 const midY = bbox.minY + (bbox.maxY - bbox.minY) * 0.45;
-                for (let attempt = 0; attempt < 60; attempt++) {
+                for (let attempt = 0; attempt < 50; attempt++) {
                     const randX = randomRange(bbox.minX, bbox.maxX);
                     const randY = randomRange(topBound, midY);
                     if (isPointInPolygon(randX, randY, points)) return { x: randX, y: randY };
                 }
                 return randomPointInPolygonUniform(points);
             }
-            // 粒子类：包含残影绘制（01序列垂直拖尾）
+            // 粒子：01字符 + 垂直序列残影
             class RedRainParticle {
                 constructor(x, y, speed, char, fontSize) {
                     this.x = x;
@@ -146,48 +154,45 @@ badge: ''
                     this.char = char;
                     this.fontSize = fontSize;
                     this.opacity = randomRange(0.8, 1.0);
-                    this.driftX = randomRange(-0.2, 0.2);
+                    this.driftX = randomRange(-0.15, 0.15);
                 }
                 update(deltaSeconds) {
                     this.y += this.speed * deltaSeconds;
-                    this.x += this.driftX * 0.5 * deltaSeconds;
+                    this.x += this.driftX * 0.45 * deltaSeconds;
                 }
-                // 绘制当前粒子 + 其身后的残影序列（01字符沿垂直方向排列）
                 draw(ctx) {
                     ctx.save();
-                    // 文字对齐中心，保证残影严格垂直
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    // 动态计算残影数量：速度越快残影越多且间距越大 (3~7个)
-                    const speedFactor = Math.min(1.2, (this.speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN));
-                    const ghostCount = Math.floor(4 + speedFactor * 4);   // 4~8个残影
-                    const stepY = 6 + speedFactor * 8;                    // 残影间距 (像素)
-                    // 先绘制残影序列（从近到远，越往下透明度越低，字体稍小）
+                    const speedFactor = Math.min(1.0, (this.speed - SPEED_MIN) / (SPEED_MAX - SPEED_MIN));
+                    let ghostCount = Math.floor(3 + speedFactor * 4);
+                    ghostCount = Math.min(ghostCount, 6);
+                    const stepY = 5 + speedFactor * 7;
+                    // 向上残影序列（历史轨迹）
                     for (let i = 1; i <= ghostCount; i++) {
-                        const ghostY = this.y - i * stepY;      // 残影在粒子正上方（历史位置），形成垂直拖尾
-                        if (ghostY < -30) continue;
-                        const ghostOpacity = this.opacity * (1 - i / (ghostCount + 1)) * 0.6;
-                        const ghostSize = this.fontSize * (1 - i * 0.08);
+                        const ghostY = this.y - i * stepY;
+                        if (ghostY < -40) continue;
+                        const ghostOpacity = this.opacity * (1 - i / (ghostCount + 1)) * 0.55;
+                        const ghostSize = this.fontSize * (1 - i * 0.09);
                         if (ghostSize < 8) continue;
-                        ctx.shadowBlur = i === 1 ? 8 : 4;
+                        ctx.shadowBlur = i === 1 ? 7 : 3;
                         ctx.shadowColor = "#ff2060";
-                        ctx.fillStyle = `rgba(255, 50, 90, ${ghostOpacity})`;
+                        ctx.fillStyle = `rgba(255, 55, 95, ${ghostOpacity})`;
                         ctx.font = `${Math.floor(ghostSize)}px "Courier New", monospace`;
                         ctx.fillText(this.char, this.x, ghostY);
-                        // 残影微光晕 (二次模糊)
-                        ctx.fillStyle = `rgba(255, 80, 120, ${ghostOpacity * 0.5})`;
-                        ctx.fillText(this.char, this.x, ghostY - 1);
+                        ctx.fillStyle = `rgba(255, 85, 125, ${ghostOpacity * 0.4})`;
+                        ctx.fillText(this.char, this.x, ghostY - 1.5);
                     }
-                    // 绘制当前主字符（最亮最清晰）
+                    // 主字符
                     ctx.shadowBlur = 12;
                     ctx.shadowColor = "#ff3060";
                     ctx.fillStyle = `rgba(255, 45, 85, ${this.opacity})`;
                     ctx.font = `${this.fontSize}px "Courier New", monospace`;
                     ctx.fillText(this.char, this.x, this.y);
-                    // 主字符下方额外微弱光晕（增强坠落感）
-                    ctx.shadowBlur = 6;
-                    ctx.fillStyle = `rgba(255, 30, 70, 0.3)`;
-                    ctx.fillText(this.char, this.x, this.y + 2);
+                    // 主字符下方微残影
+                    ctx.shadowBlur = 5;
+                    ctx.fillStyle = `rgba(255, 35, 75, 0.28)`;
+                    ctx.fillText(this.char, this.x, this.y + 2.5);
                     ctx.restore();
                 }
             }
@@ -207,8 +212,8 @@ badge: ''
                 for (let i = 0; i < particlesArr.length; i++) {
                     const p = particlesArr[i];
                     let needReset = false;
-                    if (p.y > canvasH + 80 || p.y < -80) needReset = true;
-                    else if (p.x < -100 || p.x > canvasW + 100) needReset = true;
+                    if (p.y > canvasH + 70 || p.y < -70) needReset = true;
+                    else if (p.x < -90 || p.x > canvasW + 90) needReset = true;
                     else if (!isPointInPolygon(p.x, p.y, polygonPoints)) needReset = true;
                     if (needReset) {
                         const newPos = randomTopPointInPolygon(polygonPoints);
@@ -218,7 +223,7 @@ badge: ''
                         p.char = Math.random() > 0.5 ? '0' : '1';
                         p.fontSize = Math.floor(randomRange(FONT_MIN, FONT_MAX));
                         p.opacity = randomRange(0.8, 1.0);
-                        p.driftX = randomRange(-0.2, 0.2);
+                        p.driftX = randomRange(-0.15, 0.15);
                     }
                 }
             }
@@ -226,51 +231,161 @@ badge: ''
                 const safeDelta = Math.min(deltaSeconds, 0.033);
                 for (let p of particlesArr) p.update(safeDelta);
             }
-            // 渲染窟窿内部（黑色背景 + 01序列雨滴）
+            // ========== 关键修改：增强内阴影、凹陷感，不再是纯黑 ==========
             function renderVoidInside(ctx, particlesArr, polygonPoints, w, h) {
                 if (!polygonPoints.length) return;
                 ctx.save();
                 const clipPath = polygonToPath(polygonPoints);
                 if (!clipPath) { ctx.restore(); return; }
                 ctx.clip(clipPath, 'evenodd');
-                // 深邃黑色背景 + 极弱红色辐射
-                const innerGrad = ctx.createRadialGradient(centerX - 18, centerY - 20, 15, centerX, centerY, baseRadius * 0.75);
-                innerGrad.addColorStop(0, '#0a0002');
-                innerGrad.addColorStop(1, '#000000');
-                ctx.fillStyle = innerGrad;
+                // 1. 基础底色：深红黑渐变（中心稍亮，边缘极暗，模拟凹陷）
+                const grad = ctx.createRadialGradient(centerX, centerY, 15, centerX, centerY, Math.max(baseRadiusX, baseRadiusY) * 0.9);
+                grad.addColorStop(0, '#2a050b');      // 中心微红黑
+                grad.addColorStop(0.5, '#0a0002');
+                grad.addColorStop(1, '#000000');
+                ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, w, h);
-                // 稀疏红色噪点
-                ctx.fillStyle = "rgba(255, 50, 85, 0.04)";
-                for (let i = 0; i < 60; i++) {
+                // 2. 内阴影层：沿着多边形内侧多层描边，制造厚度感
+                ctx.save();
+                ctx.shadowBlur = 0;
+                // 第一层：宽而黑的暗影 (向内晕染)
+                for (let i = 0; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
+                    for (let j = 1; j < polygonPoints.length; j++) ctx.lineTo(polygonPoints[j].x, polygonPoints[j].y);
+                    ctx.closePath();
+                    const lineWidth = 14 - i * 3;
+                    const alpha = 0.65 - i * 0.12;
+                    ctx.strokeStyle = `rgba(0, 0, 0, ${alpha})`;
+                    ctx.lineWidth = lineWidth;
+                    ctx.stroke();
+                }
+                // 第二层：暗红色内边缘 (像烧焦的裂痕)
+                ctx.beginPath();
+                ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
+                for (let j = 1; j < polygonPoints.length; j++) ctx.lineTo(polygonPoints[j].x, polygonPoints[j].y);
+                ctx.closePath();
+                ctx.strokeStyle = `rgba(80, 15, 25, 0.8)`;
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                ctx.strokeStyle = `rgba(140, 25, 45, 0.55)`;
+                ctx.lineWidth = 4;
+                ctx.stroke();
+                // 3. 增加向内延伸的暗色辐射渐变（模拟凹陷的纵深）
+                const innerShadowGrad = ctx.createLinearGradient(centerX - baseRadiusX * 0.6, centerY, centerX + baseRadiusX * 0.6, centerY);
+                innerShadowGrad.addColorStop(0, 'rgba(0,0,0,0)');
+                innerShadowGrad.addColorStop(0.4, 'rgba(0,0,0,0.3)');
+                innerShadowGrad.addColorStop(0.8, 'rgba(40,5,10,0.6)');
+                innerShadowGrad.addColorStop(1, 'rgba(0,0,0,0.9)');
+                ctx.fillStyle = innerShadowGrad;
+                ctx.fillRect(0, 0, w, h);
+                // 4. 边缘高光（微弱的红光，模拟破碎边缘的反光）
+                ctx.beginPath();
+                ctx.moveTo(polygonPoints[0].x, polygonPoints[0].y);
+                for (let j = 1; j < polygonPoints.length; j++) ctx.lineTo(polygonPoints[j].x, polygonPoints[j].y);
+                ctx.closePath();
+                ctx.strokeStyle = `rgba(255, 60, 100, 0.35)`;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+                ctx.restore();
+                // 稀疏红色噪点 (性能优化)
+                ctx.fillStyle = "rgba(255, 45, 80, 0.045)";
+                for (let i = 0; i < 35; i++) {
                     if (Math.random() > 0.97) ctx.fillRect(Math.random() * w, Math.random() * h, 1.5, 1);
                 }
-                // 绘制所有粒子（每个粒子自带残影序列）
+                // 绘制01粒子
                 for (let p of particlesArr) p.draw(ctx);
                 ctx.restore();
             }
-            // 窟窿边缘红色光晕 (仅保留轮廓和内部流光，移除所有刺芒/短线)
-            function drawRedEdgeGlow(ctx, points, time) {
+            // 外边缘红光 + 放射性裂纹 (由近及远透明)
+            function drawRedEdgeAndCracks(ctx, points, time) {
                 if (!points || points.length < 3) return;
                 ctx.save();
-                ctx.shadowBlur = 0;
+                // 外轮廓红光
                 ctx.beginPath();
                 ctx.moveTo(points[0].x, points[0].y);
                 for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
                 ctx.closePath();
-                // 主轮廓强红光
-                ctx.strokeStyle = `rgba(255, 40, 85, 1)`;
+                ctx.strokeStyle = `rgba(255, 55, 100, 1)`;
                 ctx.lineWidth = 2.8;
                 ctx.shadowBlur = 14;
                 ctx.shadowColor = "#ff3060";
                 ctx.stroke();
-                // 内层暖红流光
-                ctx.strokeStyle = `rgba(255, 105, 135, 0.8)`;
-                ctx.lineWidth = 1.5;
-                ctx.shadowBlur = 8;
+                ctx.strokeStyle = `rgba(255, 115, 145, 0.85)`;
+                ctx.lineWidth = 1.7;
+                ctx.shadowBlur = 7;
                 ctx.stroke();
-                // 注意：不再绘制任何向外延伸的短线或刺芒，彻底清除接缝处的转动线条
+                // 裂纹
+                ctx.shadowBlur = 0;
+                const crackCount = 58;
+                const now = time * 0.002;
+                for (let i = 0; i < crackCount; i++) {
+                    const idx = Math.floor(Math.random() * points.length);
+                    const start = points[idx];
+                    if (!start) continue;
+                    const dx = start.x - centerX;
+                    const dy = start.y - centerY;
+                    const len = Math.hypot(dx, dy);
+                    if (len < 0.1) continue;
+                    const dirX = dx / len;
+                    const dirY = dy / len;
+                    const angleOffset = (Math.sin(now * 1.3 + idx) * 0.9 + Math.cos(now * 0.7 + idx * 1.2) * 0.7) * 1.1;
+                    const randAngle = angleOffset + (Math.sin(i * 0.7) * 0.5);
+                    const rotDirX = dirX * Math.cos(randAngle) - dirY * Math.sin(randAngle);
+                    const rotDirY = dirX * Math.sin(randAngle) + dirY * Math.cos(randAngle);
+                    let crackLen = randomRange(14, 52);
+                    crackLen += Math.sin(now * 2.5 + idx) * 6;
+                    crackLen = Math.max(12, crackLen);
+                    const segments = 3;
+                    for (let seg = 1; seg <= segments; seg++) {
+                        const tSeg = seg / segments;
+                        const endX = start.x + rotDirX * crackLen * tSeg;
+                        const endY = start.y + rotDirY * crackLen * tSeg;
+                        const alpha = (1 - tSeg * 0.85) * 0.9;
+                        ctx.beginPath();
+                        ctx.moveTo(start.x + rotDirX * crackLen * (seg-1)/segments, 
+                                    start.y + rotDirY * crackLen * (seg-1)/segments);
+                        ctx.lineTo(endX, endY);
+                        ctx.strokeStyle = `rgba(255, 65, 110, ${alpha * 0.85})`;
+                        ctx.lineWidth = 1.2 + (1 - tSeg) * 1.3;
+                        ctx.stroke();
+                    }
+                    if (Math.random() > 0.65) {
+                        const subLen = crackLen * 0.5;
+                        const subAngle = randAngle + (Math.random() - 0.5) * 1.2;
+                        const subDirX = dirX * Math.cos(subAngle) - dirY * Math.sin(subAngle);
+                        const subDirY = dirX * Math.sin(subAngle) + dirY * Math.cos(subAngle);
+                        ctx.beginPath();
+                        ctx.moveTo(start.x + rotDirX * crackLen * 0.3, start.y + rotDirY * crackLen * 0.3);
+                        ctx.lineTo(start.x + subDirX * subLen, start.y + subDirY * subLen);
+                        ctx.strokeStyle = `rgba(255, 85, 125, 0.55)`;
+                        ctx.lineWidth = 0.9;
+                        ctx.stroke();
+                    }
+                }
+                // 向内短裂纹
+                for (let i = 0; i < points.length; i++) {
+                    const p = points[i];
+                    const next = points[(i+1) % points.length];
+                    const midX = (p.x + next.x) / 2;
+                    const midY = (p.y + next.y) / 2;
+                    const inwardX = midX - centerX;
+                    const inwardY = midY - centerY;
+                    const inwardLen = Math.hypot(inwardX, inwardY);
+                    if (inwardLen < 1) continue;
+                    const normInX = inwardX / inwardLen;
+                    const normInY = inwardY / inwardLen;
+                    const inLen = randomRange(10, 24);
+                    ctx.beginPath();
+                    ctx.moveTo(midX, midY);
+                    ctx.lineTo(midX - normInX * inLen * 0.6, midY - normInY * inLen * 0.6);
+                    ctx.strokeStyle = `rgba(255, 70, 115, 0.75)`;
+                    ctx.lineWidth = 1.1;
+                    ctx.stroke();
+                }
                 ctx.restore();
             }
+            // 自适应尺寸，保持横向拉长
             function resizeAndSetup() {
                 const rect = canvas.getBoundingClientRect();
                 width = rect.width;
@@ -280,10 +395,13 @@ badge: ''
                 centerX = width / 2;
                 centerY = height / 2;
                 const minSide = Math.min(width, height);
-                baseRadius = Math.min(minSide * 0.38, 280);
-                baseRadius = Math.max(baseRadius, 128);
-                noiseAmp = Math.min(38, baseRadius * 0.2);
-                const initPoly = generateIrregularHole(centerX, centerY, baseRadius, 0, VERTEX_COUNT);
+                baseRadiusX = Math.min(minSide * 0.55, 280);
+                baseRadiusY = Math.min(minSide * 0.38, 180);
+                if (baseRadiusX < baseRadiusY) {
+                    [baseRadiusX, baseRadiusY] = [baseRadiusY, baseRadiusX];
+                }
+                noiseAmp = Math.min(32, baseRadiusX * 0.18);
+                const initPoly = generateEllipseHole(centerX, centerY, baseRadiusX, baseRadiusY, 0, VERTEX_COUNT);
                 currentPolygonPoints = initPoly;
                 particles = initParticles(currentPolygonPoints);
             }
@@ -295,15 +413,17 @@ badge: ''
                 lastFrame = nowMs;
                 globalTime = nowMs;
                 const shapeTime = globalTime * 0.0022;
-                currentPolygonPoints = generateIrregularHole(centerX, centerY, baseRadius, shapeTime, VERTEX_COUNT);
+                currentPolygonPoints = generateEllipseHole(centerX, centerY, baseRadiusX, baseRadiusY, shapeTime, VERTEX_COUNT);
                 updateParticles(particles, deltaTimeSec);
                 resetOutOfBoundsParticles(particles, currentPolygonPoints, height, width);
                 ctx.clearRect(0, 0, width, height);
                 renderVoidInside(ctx, particles, currentPolygonPoints, width, height);
-                drawRedEdgeGlow(ctx, currentPolygonPoints, globalTime);
+                drawRedEdgeAndCracks(ctx, currentPolygonPoints, globalTime);
                 animationId = requestAnimationFrame(animate);
             }
-            window.addEventListener('resize', () => resizeAndSetup());
+            window.addEventListener('resize', () => {
+                resizeAndSetup();
+            });
             function start() {
                 resizeAndSetup();
                 lastFrame = performance.now();
@@ -314,6 +434,7 @@ badge: ''
     </script>
 </body>
 </html>
+
 
 # 第一章 时间序列分析概述
 

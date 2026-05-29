@@ -1,0 +1,37 @@
+---
+// src/components/mdx/Spoiler.astro
+const { } = Astro.props;
+---
+
+<span class="spoiler">
+  <span class="spoiler-text">
+    <span class="spoiler-content">
+      <slot />
+    </span>
+  </span>
+</span>
+
+<style>
+    .spoiler {
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .spoiler-text {
+        display: inline-block;
+        border-bottom: 2px solid #999;
+        line-height: 1.2;
+    }
+
+    .spoiler-content {
+        display: inline-block;
+        filter: blur(4px);
+        opacity: 0.7;
+        transition: all 0.25s ease-out;
+    }
+
+    .spoiler:hover .spoiler-content {
+        filter: blur(0);
+        opacity: 1;
+    }
+</style>

@@ -1,0 +1,198 @@
+---
+title: 时间序列-数据分析
+description: 把自己会的一些稍微写了一下
+pubDate: 2026-06-01T11:18
+image: https://origin.picgo.net/2026/06/01/wallhaven-g8rkmla27fcaba6e77ef03.webp
+draft: false
+tags:
+  - 时间序列
+categories:
+  - 期末复习
+---
+import Collapse from "../../components/mdx/Collapse.astro";
+import Error from "../../components/mdx/Error.astro";
+
+
+![Pasted image 20260531212823](https://origin.picgo.net/2026/06/01/Pasted-image-20260531212823812aadf219da91b6.png)
+
+考虑这张图，很明显，这是非平稳的
+
+# 单位根检验
+
+考虑对上文的模型的检验，给出以下代码和结果
+
+```R
+test3 <- ur.df(rwi, type = "trend", lags = 0)
+summary(test3)
+```
+
+![Pasted image 20260531212853](https://origin.picgo.net/2026/06/01/Pasted-image-2026053121285309f9b342f0e4f547.png)
+
+这是单位根检验的输出结果，此时是`type = "trend"`，说明是 模型3 的ADF检验结果。
+
+输出的结果第一个是`-1.6288`，记为 `A`
+输出的结果第二个是`38.813`，记为 `B`
+输出的结果第三个是`1.3466`，记为 `C`
+
+---
+
+## 第一个检验
+
+`A` 需要和 `tau3` 中的 `5pct` 比较。(即 是否有 95% 的把握认为平稳)
+
+其中：
+$$
+\begin{align*}
+H_0 &: \rho = 0 \\
+H_1 &: \rho < 0
+\end{align*}
+$$
+
+- **原假设 $H0:ρ=0$**：意味着序列 $y_t$ 存在单位根，即 $y_t​$ 是非平稳的。
+    
+- **备择假设 $H1:ρ<0$**：意味着序列 $y_t​$ 是平稳的。
+
+此时，`A` **越小越拒绝原假设**。但观察此时 `A`的值为`-1.6288> -3.45`。
+
+所以无法拒绝原假设，所以认为此序列非平稳。
+
+---
+## 第二和第三个检验
+
+但非平稳时，进入第二个和第三个假设。
+
+`phi2`：$H_0: \alpha = 0, \beta = 0, \rho = 0$统计量:$\phi_2$；拒绝域: $\phi_2 > \phi_{2,\alpha}$
+
+`phi3`：$H_0: \beta = 0, \rho = 0$统计量:$\phi_3$；拒绝域: $\phi_3 > \phi_{3,\alpha}$
+
+此时对他们的检验是**越大越拒绝原假设**。
+
+## 具体分析
+
+`phi2`说明是否 $\alpha = 0且\beta = 0且\rho = 0$
+
+`B` 显然 > `phi2` 的 `5pct` 值，所以拒绝原假设，有95%的把握认为$\alpha或\beta或\rho$ 至少有一个不为0。
+
+
+根据上文的 `tau3` 检验，我们知道 $\rho = 0$，所以$\alpha或\beta$有一个不为0。
+
+---
+
+`phi3`说明是否 $\beta = 0且\rho = 0$
+
+C < `phi3` 的 `5pct` 值，所以无法拒绝原假设，说明$\beta = 0且\rho = 0$，所以最终 $\alpha ≠ 0$ ，此时确定的是 **模型2**。
+
+## 后续的检验
+
+上文讲述的是**模型3**的检验，这里提供的是上文序列的**模型2**的检验。
+
+
+
+```R
+test2 <- ur.df(rwi, type = "drift", lags = 0)
+summary(test2) #模型2的检验
+```
+
+![Pasted image 20260601102122](https://origin.picgo.net/2026/06/01/Pasted-image-20260601102122b3032a0c592f3421.png)
+
+- **tau2** 是检验 $ρ=0$ 的 $t$ 统计量。
+    
+- **phi1** 是一个联合 $F$ 检验统计量，用于检验 **原假设 $H0:α=0, ρ=0$**
+
+<Collapse title="此时，你能得出什么结论呢？">
+- `phi1 = 62.2532`，远大于 5% 的临界值 4.71，因此 **拒绝** 原假设，说明 $α$ 和 $ρ$ 至少有一个不为 0。
+- 
+- 而 `tau2 = -1.9066` > 5% 临界值 -2.89，**无法拒绝** $ρ=0$ 的原假设，因此 $ρ=0$。
+
+结合起来就得到：$ρ=0 且 α≠0$，即 **带漂移项的单位根过程**，与之前的分析一致。</Collapse>
+
+---
+# 模型阶数的选择
+
+## AR
+
+考虑如下的序列
+
+![Pasted image 20260531215404](https://origin.picgo.net/2026/06/01/Pasted-image-20260531215404485b5091e25beb2a.png)
+
+明显 ACF 拖尾，PACF 截尾。
+
+PACF 截尾部分 **有两条线在0的右侧且超出了虚线**（有时候 线 会对齐0，这是自己和自己相关，所以不能说成是AR(1) ），说明有2阶的相关性，所以为AR(2)模型。
+
+比如这张图里的第一张图。
+
+![Pasted image 20260601105204](https://origin.picgo.net/2026/06/01/Pasted-image-20260601105204d44938d6a1d7ca8f.png)
+## MA
+
+![Pasted image 20260601102844](https://origin.picgo.net/2026/06/01/Pasted-image-20260601102844dd471571cad7ac83.png)
+
+MA也是一样的，不过这里要看的是ACF，此为MA(2)模型
+
+## ARMA
+
+ARMA ACF 和 PACF 均拖尾，无法判断，此时需要使用AIC 和BIC
+
+### 以 BIC 为例
+
+```R
+test2 <- arima.sim(model = list(ar = c(0.2, 0.3), ma = c(0.5, 0.7)), n = 200)
+subsets2 <- armasubsets(test2, nar = 5, nma = 5, y.name = "test", ar.method = "ols")
+plot(subsets2, scale = "BIC") # help(plot.armasubsets)
+```
+![Pasted image 20260601103506](https://origin.picgo.net/2026/06/01/Pasted-image-20260601103506534b37701f6a1617.png)
+
+规则如下：
+
+- 竖着看，柱子越连贯越好，说明BIC越小
+- 第一列的`(Intercept)` 为**截距项**，无用，不要看。
+- `test-lag` 为 AR 部分
+- `error-lag` 为 MA 部分
+
+此时观察图片，AR 部分 比较完整的柱子是 lag2，MA 部分 比较完整的也是 lag2。所以此时模型为 ARMA（1，1）
+
+# 诊断性检验
+
+## 残差诊断图: ACF, PACF, WN, QQplot
+
+![Pasted image 20260601105204](https://origin.picgo.net/2026/06/01/Pasted-image-20260601105204d44938d6a1d7ca8f.png)
+
+这里看的是残差，残差最好是白噪音。
+### ACF
+
+只有 0 的线超出虚线是最好的。
+
+### PACF
+
+均在虚线内是最好的。
+
+### WN
+
+所有的点均在虚线上方是最好的。
+
+### QQplot
+
+点越接近红线的样子则越好，说明残差服从正太分布。
+
+# 有季节效应的非平稳序列分析
+
+假设已知这是个季节模型，已经进行了一次一阶差分，和一次12步季节差分
+
+
+![Pasted image 20260601111054](https://origin.picgo.net/2026/06/01/Pasted-image-2026060111105404cc42f72538a19e.png)
+
+快进到SARIMA选模型，虽然AR部分的滞后阶数被挡住了，但是就是从1开始一直往后数就行了。
+
+这里看到，AR 部分最完整的是 lag1，所以AR 部分是 1阶
+MA部分 lag小的没有，但是在lag 12 有一个完整的，你不会写成ARMA（1，12）吧。
+
+看看我们的前提，这是个12期的季节模型，所以这里12应该写在季节部分咯。
+
+所以模型应该是：
+$$SARIMA(1, 1, 0) * (0, 1, 1)_{12}$$
+
+
+---
+
+其他的和上文类似，就不多说了。
+
+<Error>最后说一下ADF检验对季节单位根不敏感，包括 tau 统计量、phi 联合检验统计量以及它们对应的临界值基本上都不能直接信任。 </Error>

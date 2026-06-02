@@ -93,7 +93,11 @@ $$
 \mathbf{x} - \boldsymbol{\mu} = (1-2, 1-1)' = (-1, 0)'
 $$
 
-<Warning>$\mathbf{x} - \boldsymbol{\mu}$ 是一个列向量</Warning>
+<Warning>
+
+$\mathbf{x} - \boldsymbol{\mu}$ 是一个列向量
+
+</Warning>
 
 平方马氏距离：
 $$
@@ -277,6 +281,7 @@ $$
 这些和 $\mu$ 是无关的，可以视作常数，要使得$ln(L(\boldsymbol{\mu}))$最大，就是要使得$\sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu})$最小，因为是减去嘛。
 
 <Info>
+
 为什么这里是让它最小呢，你也没确定它的正负啊？
 
 $(\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu})$是马氏距离的平方，可以证明它是非负的。

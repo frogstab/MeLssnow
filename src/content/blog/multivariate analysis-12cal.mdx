@@ -1,0 +1,388 @@
+---
+title: 多元统计分析-一二章计算详解
+description: 包括了（简答题）和（计算题的详解）
+pubDate: 2026-06-02T21:45
+image: >-
+  https://origin.picgo.net/2026/06/02/one-does-not-f684c94b128d013cba51154005.png
+draft: false
+tags:
+  - 多元统计分析
+categories:
+  - 期末复习
+---
+import Warning from "../../components/mdx/Warning.astro";
+import Info from "../../components/mdx/Info.astro";
+# 什么是多元统计分析？ 
+
+多元统计分析是一元统计分析的推广，旨在研究多个随机变量之间相互依赖关系及其内在统计规律的一门学科。
+
+# 多元统计分析的主要方法及应用。
+
+- **均值向量的推断和比较**：如单个总体均值向量的**参数估计**与**假设检验**；不同总体均值向量的比较。
+  *应用*：比较不同材质灯泡的寿命与亮度。
+
+- **多元线性回归模型**：主要用于预测与因果推断，具体包含简单线性回归、多重线性回归以及多元多重线性回归
+  *应用*：经济预测、生物医学中的风险因素分析。 
+
+- **多元相关分析**：探讨多个随机变量之间的相关关系，包括简单相关、偏相关、复相关及典型相关分析。  
+  *应用*：分析两组变量之间的整体相关性。  
+
+- **主成分分析和因子分析**：数据降维，用少数几个主成分/因子保留原始变量的大部分信息。
+  *应用*：图像压缩、综合评价指标构建。
+
+- **分类分析和聚类分析**：分类将新对象归入已知类别；聚类按相似性将对象分簇。  
+  *应用*：医疗诊断（分类）、古生物骨骼形态分组（聚类）。
+
+---
+
+# 什么是多元正态分布？什么是马氏距离？什么是广义方差？
+
+- **多元正态分布**：设 $\mathbf{Y} = (Y_1,\dots,Y_p)' \sim N_p(\mathbf{0}, \mathbf{I}_p)$，则通过**仿射变换** $\mathbf{X} = \mathbf{A}\mathbf{Y} + \boldsymbol{\mu}$ 得到的随机向量服从 $p$ 维多元正态分布，记作 $\mathbf{X} \sim N_p(\boldsymbol{\mu}, \boldsymbol{\Sigma})$，其中 $\boldsymbol{\Sigma} = \mathbf{A}\mathbf{A}'$。其密度函数为：
+$$
+f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2}|\boldsymbol{\Sigma}|^{1/2}} \exp\left(-\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})'\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})\right).
+$$
+
+- **马氏距离**：点 $\mathbf{x}$ 到总体中心 $\boldsymbol{\mu}$ 的马氏距离为 $\sqrt{(\mathbf{x}-\boldsymbol{\mu})'\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$。它考虑了变量的**尺度差异**和**相关性**，是一种**统计距离**。
+
+- **广义方差**：
+	- **总体**的广义方差为 $|\boldsymbol{\Sigma}|$
+	- **样本**广义方差为 $|\mathbf{S}|$，其中 $\mathbf{S} = \frac{1}{n-1}\sum_{j=1}^{n}(\mathbf{X}_j - \bar{\mathbf{X}})(\mathbf{X}_j - \bar{\mathbf{X}})'$。
+---
+1. $exp(a) = e^a$
+2. $I = E$(单位阵)
+3. 马氏距离就是exp内部的一部分开根号
+4. $A' = A^T$
+5. p 为 随机变量的维数（即列数），随机变量为**列向量**
+
+## 例题
+
+ 已知 $\mathbf{Y} \sim N_2\left( \begin{bmatrix} 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} \right)$。如果 $\mathbf{X} = \mathbf{A}\mathbf{Y} + \boldsymbol{\mu}$，$\mathbf{A} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}$，$\boldsymbol{\mu} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$，求解
+ 
+### (1) $\mathbf{X}$的密度函数$f(\mathbf{X})$；
+ 
+随机变量是 **2维** 的
+
+根据密度函数公式可知，我们需要求解 X 的 $\mu$ 和 $\boldsymbol{\Sigma}$ 才能写出密度函数。
+
+**可以利用以下性质**：
+
+$X \sim N_p(\mu, \Sigma)$, $B$ 为$s \times p$常数矩阵，$d$为$s$维常数向量，令 $Z = BX + d$，则$Z \sim N_s(B\mu + d, B\Sigma B')$。（**PPT p17页给出此性质**）
+
+---
+
+所以$\mu_X = \mu = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$,$\boldsymbol{\Sigma}_X = \mathbf{A}{I}\mathbf{A}' = \begin{bmatrix} 2 & 3 \\ 3 & 5 \end{bmatrix}$，可以写出密度函数：
+
+$$
+f(X) = \frac{1}{2\pi} \exp\left( -\frac{1}{2} \begin{bmatrix} x_1 - 2 & x_2 - 1 \end{bmatrix} \begin{bmatrix} 2 & 3 \\ 3 & 5 \end{bmatrix}^{-1} \begin{bmatrix} x_1 - 2 \\ x_2 - 1 \end{bmatrix} \right)
+$$
+
+### (2) 在 $\mathbf{X}$ 服从的分布下，计算点$(1,1)$、点 $(-1,1)$到$\boldsymbol{\mu}$的马氏距离；
+
+某点 $\mathbf{x}$ 到总体中心 $\boldsymbol{\mu}$ 的马氏距离为 $\sqrt{(\mathbf{x}-\boldsymbol{\mu})'\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu})}$
+
+#### 先求 $\boldsymbol{\Sigma}^{-1}$
+
+$$
+\boldsymbol{\Sigma} = \begin{bmatrix} 2 & 3 \\ 3 & 5 \end{bmatrix}, \quad |\boldsymbol{\Sigma}| = 1, \quad \boldsymbol{\Sigma}^{-1} = \frac{1}{1} \begin{bmatrix} 5 & -3 \\ -3 & 2 \end{bmatrix} = \begin{bmatrix} 5 & -3 \\ -3 & 2 \end{bmatrix}.
+$$
+逆矩阵求解方法请看**考研线性代数**的内容。
+
+#### 对点 $(1,1)$
+
+$$
+\mathbf{x} - \boldsymbol{\mu} = (1-2, 1-1)' = (-1, 0)'
+$$
+
+<Warning>$\mathbf{x} - \boldsymbol{\mu}$ 是一个列向量</Warning>
+
+平方马氏距离：
+$$
+d^2 = (\mathbf{x}-\boldsymbol{\mu})'\boldsymbol{\Sigma}^{-1}(\mathbf{x}-\boldsymbol{\mu}) = (-1, 0) \begin{bmatrix} 5 & -3 \\ -3 & 2 \end{bmatrix} \begin{bmatrix} -1 \\ 0 \end{bmatrix} = (-1, 0) \begin{bmatrix} -5 \\ 3 \end{bmatrix} = 5
+$$
+
+$$
+d = \sqrt{5}
+$$
+#### 对点 $(-1,1)$
+
+$$
+\mathbf{x} - \boldsymbol{\mu} = (-3,0)'
+$$
+
+$$
+d^2 = (-3,0) \begin{bmatrix} 5 & -3 \\ -3 & 2 \end{bmatrix} \begin{bmatrix} -3 \\ 0 \end{bmatrix} = 45
+$$
+
+$$
+d = 3\sqrt{5}
+$$
+
+
+### (3)$\mathbf{X}$ 的广义方差。
+
+**总体**的广义方差为 $|\boldsymbol{\Sigma}|$
+
+广义方差即 $|\Sigma| = 10-9 = 1$。
+
+---
+
+## 例题
+
+已知 $\zeta = \xi + \eta$，$\begin{bmatrix} \xi \\ \eta \end{bmatrix} \sim N\left( \begin{bmatrix} 3 \\ 4 \end{bmatrix}, \begin{bmatrix} 1 & 1 \\ 1 & 3 \end{bmatrix} \right)$。其中，$\zeta$ 为某人知晓的含有产品价值信息（$\xi$）和随机扰动项（$\eta$）的信号。如果此人收到的信号 $\zeta = 4$，问产品价值的条件期望 $E(\xi | \zeta = 4)$ 是多少？
+
+### 解析：
+
+先给 X 分个块。
+
+$$
+\boldsymbol{X} = \begin{bmatrix} \boldsymbol{X}^{(1)} \\ \boldsymbol{X}^{(2)} \end{bmatrix} \begin{array}{c} r \\ p - r \end{array} \sim N_p(\boldsymbol{\mu}, \boldsymbol{\Sigma}) \ (\boldsymbol{\Sigma} > 0)
+$$
+
+这个指上部分${X}^{(1)}$ 有 $r$ 个随机变量，下面${X}^{(2)}$ 有 $p-r$ 个随机变量
+
+#### 所以给定$\boldsymbol{X}^{(2)}$时，$\boldsymbol{X}^{(1)}$的条件分布为：
+$$
+\left( \boldsymbol{X}^{(1)} \mid \boldsymbol{X}^{(2)} \right) \sim N_r\left( \boldsymbol{\mu}_{1\cdot2}, \boldsymbol{\Sigma}_{11\cdot2} \right)
+$$
+其中:
+$$
+\boldsymbol{\mu}_{1\cdot2} = \boldsymbol{\mu}^{(1)} + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \left( \boldsymbol{x}^{(2)} - \boldsymbol{\mu}^{(2)} \right)
+$$
+
+$$
+\boldsymbol{\Sigma}_{11\cdot2} = \boldsymbol{\Sigma}_{11} - \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \boldsymbol{\Sigma}_{21}
+$$
+
+##### 条件期望即为：
+$$
+\mathbf{E}(X^{(1)} | X^{(2)}) = \boldsymbol{\mu}_{1\cdot2} = \boldsymbol{\mu}^{(1)} + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \left( x^{(2)} - \boldsymbol{\mu}^{(2)} \right)
+$$
+
+你应该看不懂，但是你至少要完整的看一遍，下面我来解释一下：
+
+矩阵分块后会变成这样：
+
+$$
+\mathbf{X} = \begin{bmatrix} \mathbf{X}^{(1)} \\ \mathbf{X}^{(2)} \end{bmatrix} \begin{array}{c} r \\ p-r \end{array}, \quad \boldsymbol{\mu} = \begin{bmatrix} \boldsymbol{\mu}^{(1)} \\ \boldsymbol{\mu}^{(2)} \end{bmatrix}, \quad \boldsymbol{\Sigma} = \begin{bmatrix} \boldsymbol{\Sigma}_{11} & \boldsymbol{\Sigma}_{12} \\ \boldsymbol{\Sigma}_{21} & \boldsymbol{\Sigma}_{22} \end{bmatrix} \begin{array}{c} r \\ p-r \end{array} \begin{array}{cc}\end{array}
+$$
+
+其中每个部分的大小：
+- $\boldsymbol{\Sigma}_{11}$：$r \times r$（$\boldsymbol{X}^{(1)}$的协方差）
+- $\boldsymbol{\Sigma}_{22}$：$(p - r) \times (p - r)$（$\boldsymbol{X}^{(2)}$的协方差）
+- $\Sigma_{21}: (p - r) \times r$
+- $\boldsymbol{\Sigma}_{12}$：$r \times (p - r)$，且 $\boldsymbol{\Sigma}_{21} = \boldsymbol{\Sigma}_{12}^\top$
+
+---
+也许你还不懂，那就慢慢求一下这题：
+
+我们需要求$E(\xi | \zeta = 4)$，首先我们肯定要求出那些乱七八糟的协方差了。然后带入公式了。
+
+但是求协方差要知道概率分布，不然怎么分块呢？但我们现在只知道$\begin{bmatrix} \xi \\ \eta \end{bmatrix}$的分布，所以我们需要先求$\begin{bmatrix} \xi \\ \zeta \end{bmatrix}$的联合概率分布才能分块。
+
+#### 联合概率分布
+
+联合概率分布怎么求呢？也是用到上面学的：
+
+$X \sim N_p(\mu, \Sigma)$, $B$ 为$s \times p$常数矩阵，$d$为$s$维常数向量，令 $Z = BX + d$，则$Z \sim N_s(B\mu + d, B\Sigma B')$
+
+这个性质了。
+
+我们可以看作$Z = \begin{bmatrix} \xi \\ \zeta \end{bmatrix} = \begin{bmatrix} \xi \\ \xi + \eta \end{bmatrix}$，此时我们需要确定 B 和 d，凑出$Z = BX + d$
+
+稍加思考就可以得出：
+
+$\begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}\begin{bmatrix} \xi \\ \zeta \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \end{bmatrix} = \begin{bmatrix} \xi \\ \xi + \eta \end{bmatrix}$
+
+所以 $A = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}, d = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$
+d
+
+根据公式：
+- 均值: $A\mu + d = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 3 \\ 4 \end{bmatrix} + \begin{bmatrix} 0 \\ 0 \end{bmatrix}= \begin{bmatrix} 3 \\ 7 \end{bmatrix}$
+
+- 协方差:$A\Sigma A^\top = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 1 & 2 \\ 2 & 6 \end{bmatrix}$
+
+
+所以$(\xi, \zeta)$的联合分布为:
+$$\begin{bmatrix} \xi \\ \zeta \end{bmatrix} \sim N\left( \begin{bmatrix} 3 \\ 7 \end{bmatrix}, \begin{bmatrix} 1 & 2 \\ 2 & 6 \end{bmatrix} \right)$$
+
+#### 分块
+
+好了，现在我们可以来看分块了，分块就是条件前后分块
+
+所以这里是这么分块的:
+$$\boldsymbol{X}^{(1)} = \xi \ (1 \times 1), \quad \boldsymbol{X}^{(2)} = \zeta \ (1 \times 1)$$
+分出来的都是$1\times1$的标量，这就很简单了。
+
+因为协方差和均值也都是$1\times1$的，都是标量，就相当于对着$\boldsymbol{\Sigma}$切两刀分成4分
+
+- $\mu^{(1)} = 3$
+- $\mu^{(2)} = 7$
+
+- $\boldsymbol{\Sigma}_{11}= 1$
+- $\boldsymbol{\Sigma}_{22} = 6$
+- $\Sigma_{21} = 2$
+- $\boldsymbol{\Sigma}_{12} = 2$
+
+
+再带入条件期望的公式：
+$$
+\mathbf{E}(X^{(1)} | X^{(2)}) = \boldsymbol{\mu}^{(1)} + \boldsymbol{\Sigma}_{12} \boldsymbol{\Sigma}_{22}^{-1} \left( x^{(2)} - \boldsymbol{\mu}^{(2)} \right)
+$$
+$$
+E(\xi \mid \zeta = 4) = 3 + 2 \cdot \frac{1}{6} \cdot (4 - 7) = 3 + \frac{2}{6} \cdot (-3) = 3 - 1 = 2
+$$
+
+**公式出处为 ppt p18页**
+
+---
+# 多元正态分布均值向量和协方差矩阵的极大似然估计量分别服从什么分布？
+
+设 $\mathbf{X}_1,\dots,\mathbf{X}_n \overset{}{\sim} N_p(\boldsymbol{\mu}, \boldsymbol{\Sigma})$，则：
+
+- 样本均值向量 $\bar{\mathbf{X}} = \frac{1}{n}\sum_{j=1}^n \mathbf{X}_j$ 服从 $\bar{\mathbf{X}} \sim N_p\left(\boldsymbol{\mu}, \frac{\boldsymbol{\Sigma}}{n}\right)$。
+
+- 样本协方差矩阵满足 
+	- $(n-1)\mathbf{S} = \sum_{j=1}^n (\mathbf{X}_j - \bar{\mathbf{X}})(\mathbf{X}_j - \bar{\mathbf{X}})' \sim W_p(n-1, \boldsymbol{\Sigma})$，即服从 **Wishart 分布**。
+	- 并且 $\bar{\mathbf{X}}$ 与 $\mathbf{S}$ 相互独立。
+
+## 例题
+
+已知 $\mathbf{X} \sim N_p(\boldsymbol{\mu}, \boldsymbol{\Sigma})$，$(\mathbf{X}_1, \mathbf{X}_2, \cdots, \mathbf{X}_n)$是从该分布中随机抽取的$n$ 个样本。
+证明：$\boldsymbol{\mu}$的极大似然估计量为$\overline{\mathbf{X}} = \frac{1}{n} \sum_{j=1}^n \mathbf{X}_j$。
+
+---
+
+由 $f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2} |\boldsymbol{\Sigma}|^{1/2}} \mathrm{e}^{-\frac{1}{2} (\mathbf{x} - \boldsymbol{\mu})' \boldsymbol{\Sigma}^{-1} (\mathbf{x} - \boldsymbol{\mu})}$，得
+$$
+L(\boldsymbol{\mu}, \boldsymbol{\Sigma}) = \prod_{j=1}^{n} (2\pi)^{-p/2} |\boldsymbol{\Sigma}|^{-1/2} \exp\left( -\frac{1}{2} (\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu}) \right).
+$$
+$$
+L(\boldsymbol{\mu}, \boldsymbol{\Sigma}) = \frac{1}{(2\pi)^{pn/2} |\boldsymbol{\Sigma}|^{n/2}} \mathrm{e}^{-\frac{1}{2} \sum_{j=1}^n (\mathbf{x}_j - \boldsymbol{\mu})' \boldsymbol{\Sigma}^{-1} (\mathbf{x}_j - \boldsymbol{\mu})}
+$$
+
+这一步就是对每个$f(\mathbf{x})$求乘积，再稍微化简一下，没什么好说的。
+
+---
+
+$$
+ln(L(\boldsymbol{\mu}, \boldsymbol{\Sigma})) = -\frac{np}{2} \log(2\pi) - \frac{n}{2} \log|\boldsymbol{\Sigma}| - \frac{1}{2} \sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu})
+$$
+
+极大似然函数一般都是要取对数ln的，这就是取对数的结果。这边不涉及多元的知识，所以也不多赘述。
+
+但是，观察这个式子，我们要求的是 $\mu$ 的估计量，而前面的 
+$$
+-\frac{np}{2} \log(2\pi) - \frac{n}{2} \log|\boldsymbol{\Sigma}|
+$$
+这些和 $\mu$ 是无关的，可以视作常数，要使得$ln(L(\boldsymbol{\mu}))$最大，就是要使得$\sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu})$最小，因为是减去嘛。
+
+<Info>
+为什么这里是让它最小呢，你也没确定它的正负啊？
+
+$(\mathbf{X}_j - \boldsymbol{\mu})^\top \boldsymbol{\Sigma}^{-1} (\mathbf{X}_j - \boldsymbol{\mu})$是马氏距离的平方，可以证明它是非负的。
+所以你在证明的时候可以补充一句：这是非负的。
+
+</Info>
+
+---
+此时，我们的目标就成了这个：
+$$
+\hat{\mu} = \arg \min_{\mu} \sum_{j=1}^n (\mathbf{x}_j - \mu)' \Sigma^{-1} (\mathbf{x}_j - \mu)
+$$
+这句话的意思是：$\hat{\mu}$ 就是让 $\sum_{j=1}^{n} (\mathbf{x}_j - \mu)' \Sigma^{-1} (\mathbf{x}_j - \mu)$ 取得最小值的 $\mu$ 的取值。
+
+反正现在就是要求 $\sum_{j=1}^n (\mathbf{x}_j - \mu)' \Sigma^{-1} (\mathbf{x}_j - \mu)$ 最小值啦！
+
+---
+求最小值都知道，求导呗！
+但在求导之前要准备一下，不然你也不会求，不是嘛！
+
+所以把这个展开 $(\mathbf{x}_j - \mu)' \Sigma^{-1} (\mathbf{x}_j - \mu)$，可以先把中间的 $\Sigma^{-1}$ 忽略正常展开，再在每一项中间乘上这个。
+
+$$
+(\mathbf{x}_j - \boldsymbol{\mu})' \boldsymbol{\Sigma}^{-1} (\mathbf{x}_j - \boldsymbol{\mu}) = \mathbf{x}_j' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j - 2 \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j + \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}
+$$
+
+看一下老师的ppt，老师给出了两个公式：
+
+这正好可以为我们求导提供帮助：
+$$
+\frac{\partial \mathbf{x}' \mathbf{A} \mathbf{x}}{\partial \mathbf{x}} = (\mathbf{A} + \mathbf{A}') \mathbf{x}, \quad \frac{\partial \mathbf{x}' \mathbf{A}}{\partial \mathbf{x}} = \mathbf{A}
+$$
+
+求导公式：
+$$\frac{\partial(\mathbf{x}_j - \boldsymbol{\mu})' \boldsymbol{\Sigma}^{-1} (\mathbf{x}_j - \boldsymbol{\mu})}{\partial \boldsymbol{\mu}} = \frac{\partial(\mathbf{x}_j' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j - 2 \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j + \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu})}{\partial \boldsymbol{\mu}}$$
+
+等价于三者求导相加（**利用了老师给的公式**）：
+
+- $\frac{\partial}{\partial \boldsymbol{\mu}} \left( \mathbf{x}_j' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j \right) = 0$（和 $\mu$ 无关，所以为0）
+
+- $\frac{\partial}{\partial \boldsymbol{\mu}} \left( -2 \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \mathbf{x}_j \right) = -2 \boldsymbol{\Sigma}^{-1} \mathbf{x}_j$
+
+- $\frac{\partial}{\partial \boldsymbol{\mu}} \left( \boldsymbol{\mu}' \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu} \right) = 2 \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu}$
+
+---
+
+最后加上**求和符号**，我们可以写成这个
+
+$$
+\nabla f(\boldsymbol{\mu}) \equiv \frac{\partial}{\partial \boldsymbol{\mu}} \sum_{j=1}^n (\mathbf{x}_j - \boldsymbol{\mu})' \boldsymbol{\Sigma}^{-1} (\mathbf{x}_j - \boldsymbol{\mu}) = -\sum_{j=1}^n 2 \boldsymbol{\Sigma}^{-1} (\mathbf{x}_j - \boldsymbol{\mu}) = \mathbf{0}
+$$
+
+样本均值是这个 $\bar{\mathbf{x}} = \frac{1}{n} \sum_{j=1}^{n} \mathbf{x}_j$，所以可以把求和符号代入：
+
+$$
+\nabla f(\boldsymbol{\mu}) = -2n \boldsymbol{\Sigma}^{-1} \bar{\mathbf{x}} + 2n \boldsymbol{\Sigma}^{-1} \boldsymbol{\mu} = 2n \boldsymbol{\Sigma}^{-1} (\boldsymbol{\mu} - \bar{\mathbf{x}}).
+$$
+
+---
+然后，学过数学的都知道，求驻点，令导数值为0
+
+$$
+\nabla f(\mu) = 0 \implies 2n\Sigma^{-1}(\mu - \bar{\mathbf{x}}) = 0
+$$
+
+因为$Σ^{-1}$ 正定可逆(人话就是矩阵每个元素大于0，所以它不能为0)
+$$
+\mu - \bar{x} = 0 \implies \mu = \bar{x}
+$$
+所以驻点为$\hat{\mu} = \bar{x}$。
+
+---
+
+驻点求出来了，怎么证明这是极小值点呢？难道不会是极大值吗?
+
+不会，因为海塞矩阵是**正定矩阵**，你要问我什么是海塞矩阵，我只能说没必要了解这么多（我也不知道），补上这句就行了：
+
+$$
+\nabla^2 f(\boldsymbol{\mu}) = \frac{\partial}{\partial \boldsymbol{\mu}} \nabla f(\boldsymbol{\mu})' = \sum_{j=1}^n 2\boldsymbol{\Sigma}^{-1} > 0, \text{ 目标函数的海塞矩阵正定}
+$$
+
+$$
+\boldsymbol{\mu} \text{ 的极大似然估计量为 } \hat{\boldsymbol{\mu}} = \overline{\mathbf{X}} = \frac{1}{n} \sum_{j=1}^n \mathbf{X}_j
+$$
+
+# 简述 Wishart 分布、Hotelling $T^2$ 分布和 Wilks 分布的定义。
+
+- **Wishart 分布**：
+	- 设 $\mathbf{X}_1,\dots,\mathbf{X}_n \overset{}{\sim} N_p(\mathbf{0}, \boldsymbol{\Sigma})$，则 $\mathbf{W} = \sum_{j=1}^n \mathbf{X}_j \mathbf{X}_j' \sim W_p(n, \boldsymbol{\Sigma})$。
+	- 它是多元正态样本协方差矩阵的分布。
+
+- **Hotelling $T^2$ 分布**：
+	- 设 $\mathbf{X} \sim N_p(\mathbf{0}, \boldsymbol{\Sigma})$，$\mathbf{Y} \sim W_p(n, \boldsymbol{\Sigma})$ 且独立，则 $T^2 = n \mathbf{X}' \mathbf{Y}^{-1} \mathbf{X} \sim T^2(p, n)$。
+	- 与 $F$ 分布的关系为 $\frac{n+1-p}{pn} T^2(p,n) \sim F_{p,\, n+1-p}$。
+
+- **Wilks 分布**：
+	- 设 $\mathbf{A} \sim W_p(m, \boldsymbol{\Sigma})$，$\mathbf{B} \sim W_p(n, \boldsymbol{\Sigma})$ 独立，则 $\Lambda = \frac{|\mathbf{A}|}{|\mathbf{A}+\mathbf{B}|} \sim \Lambda(p, m, n)$。
+	- 常用于多元方差分析的似然比检验。
+
+# 正态分布图形检验的常用方法有哪些？判别标准是什么？
+
+常用方法及判别标准：
+- **直方图**：观察是否对称、钟形。偏度 ≈ 0（对称），峰度 ≈ 3（尾部厚度适中）。
+
+- **Q-Q 图**：横坐标为标准正态理论分位数，纵坐标为样本次序统计量。若点大致落在一条直线上，则服从正态分布。
+
+- **卡方图（多元）**：横坐标为 $\chi_p^2$ 分位数，纵坐标为样本马氏距离平方 $d_{(j)}^2 = (\mathbf{x}_j - \bar{\mathbf{x}})'\mathbf{S}^{-1}(\mathbf{x}_j - \bar{\mathbf{x}})$ 的次序统计量。若点大致呈线性关系，则服从多元正态分布。
+
+- **散点图矩阵（多元）**：观察二维散点轮廓是否近似椭圆。

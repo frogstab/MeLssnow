@@ -64,7 +64,6 @@ import Info from "../../components/mdx/Info.astro";
 </div>
 <script>
     (function() {
-        // ---------- 平缓海浪 + 净空（无噪点）+ 深色微动地平线 + 清冷白月 ----------
         const canvas = document.getElementById('waveCanvas');
         let ctx = null;
         let width = 0, height = 0;
@@ -73,7 +72,6 @@ import Info from "../../components/mdx/Info.astro";
         let elapsedTime = 0;
         let lastFrameMs = 0;
         let horizonY = 0;
-        // 波浪参数 ———— 平缓优雅
         const WAVE = {
             freq1: 0.0068,   speed1: 1.20,  amp1: 22,
             freq2: 0.015,    speed2: 1.95,  amp2: 12,
@@ -83,7 +81,6 @@ import Info from "../../components/mdx/Info.astro";
         };
         let baseSpacing = 24;
         let minSpacing = 6;
-        // 星星数组
         let stars = [];
         const STAR_COUNT = 280;
         function initStarsStatic() {
@@ -103,7 +100,6 @@ import Info from "../../components/mdx/Info.astro";
             horizonY = height * 0.52;
             if (horizonY < 40) horizonY = height * 0.52;
         }
-        // 重新生成海浪曲线 (底部饱满)
         function regenerateCurves() {
             if (!ctx || height === 0 || horizonY <= 0) return;
             const startY = height - 1;
@@ -144,7 +140,6 @@ import Info from "../../components/mdx/Info.astro";
                 });
             }
         }
-        // 波浪偏移 (平缓)
         function getWaveOffset(x, yBase, timeSec, curve) {
             const { ampFactor, phaseOff, phaseOffY, t } = curve;
             const effectiveAmp = ampFactor * (1 - t * 0.2);
@@ -159,7 +154,6 @@ import Info from "../../components/mdx/Info.astro";
             total = Math.min(maxAmp, Math.max(-maxAmp, total));
             return total;
         }
-        // 曲线颜色 (青绿→深蓝)
         function getCurveColor(x, yBase, offsetY, curve, timeSec) {
             const { t } = curve;
             const nearR = 70, nearG = 205, nearB = 245;
@@ -189,7 +183,6 @@ import Info from "../../components/mdx/Info.astro";
             alpha = Math.min(0.92, alpha);
             return `rgba(${finalR}, ${finalG}, ${finalB}, ${alpha})`;
         }
-        // 绘制单条曲线
         function drawCurve(ctx, curve, timeSec) {
             const { yBase, lineWidthMain, lineWidthSub } = curve;
             if (yBase < horizonY - 25) return;
@@ -233,17 +226,14 @@ import Info from "../../components/mdx/Info.astro";
             }
             ctx.restore();
         }
-        // 绘制纯净星空 + 冷白月亮 (更小更白)
         function drawSkyAndMoon(timeSec) {
             if (!ctx || horizonY <= 0) return;
-            // 天空渐变
             const grad = ctx.createLinearGradient(0, 0, 0, horizonY);
             grad.addColorStop(0, '#020617');
             grad.addColorStop(0.45, '#0a1a3a');
             grad.addColorStop(1, '#102b4e');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, horizonY);
-            // 星星
             for (let s of stars) {
                 const starX = s.x * width;
                 const starY = s.y * horizonY;
@@ -261,12 +251,10 @@ import Info from "../../components/mdx/Info.astro";
                     ctx.fill();
                 }
             }
-            // ========= 月亮：更小，更白，冷色调 =========
-            const moonX = width - width * 0.16;      // 稍微左移一点让比例更好
+            const moonX = width - width * 0.16;
             const moonY = horizonY * 0.22;
-            const moonRadius = Math.min(width, height) * 0.055;  // 缩小约35%
+            const moonRadius = Math.min(width, height) * 0.055;
             ctx.save();
-            // 外层光晕 (冷白)
             const outerGlow = ctx.createRadialGradient(moonX, moonY, moonRadius * 0.2, moonX, moonY, moonRadius * 1.4);
             outerGlow.addColorStop(0, 'rgba(255, 250, 245, 0.85)');
             outerGlow.addColorStop(0.6, 'rgba(220, 230, 250, 0.45)');
@@ -275,7 +263,6 @@ import Info from "../../components/mdx/Info.astro";
             ctx.beginPath();
             ctx.arc(moonX, moonY, moonRadius * 1.15, 0, Math.PI * 2);
             ctx.fill();
-            // 月亮本体：纯白微冷
             const moonGrad = ctx.createRadialGradient(moonX - moonRadius*0.2, moonY - moonRadius*0.2, moonRadius*0.2, moonX, moonY, moonRadius);
             moonGrad.addColorStop(0, '#ffffff');
             moonGrad.addColorStop(0.8, '#f0f4fa');
@@ -284,7 +271,6 @@ import Info from "../../components/mdx/Info.astro";
             ctx.beginPath();
             ctx.arc(moonX, moonY, moonRadius, 0, Math.PI * 2);
             ctx.fill();
-            // 极淡柔光 (微呼吸感)
             ctx.globalCompositeOperation = 'lighter';
             ctx.beginPath();
             ctx.arc(moonX, moonY, moonRadius * 1.25, 0, Math.PI * 2);
@@ -293,7 +279,6 @@ import Info from "../../components/mdx/Info.astro";
             ctx.globalCompositeOperation = 'source-over';
             ctx.restore();
         }
-        // 海洋背景
         function drawOceanBackground() {
             if (!ctx || horizonY <= 0) return;
             const grad = ctx.createLinearGradient(0, horizonY, 0, height);
@@ -303,13 +288,11 @@ import Info from "../../components/mdx/Info.astro";
             grad.addColorStop(1, '#136e96');
             ctx.fillStyle = grad;
             ctx.fillRect(0, horizonY, width, height - horizonY);
-            // 极淡海底纹理
             ctx.fillStyle = 'rgba(160, 210, 240, 0.03)';
             for (let i = 0; i < 80; i++) {
                 ctx.fillRect(Math.random() * width, horizonY + Math.random() * (height - horizonY), 1.5, 1.5);
             }
         }
-        // 地平线 (深色但清晰)
         function drawHorizonGlow(timeSec) {
             if (!ctx || horizonY <= 0) return;
             ctx.save();
@@ -344,7 +327,6 @@ import Info from "../../components/mdx/Info.astro";
             ctx.stroke();
             ctx.restore();
         }
-        // 环境柔光
         function drawAmbient() {
             if (!ctx || horizonY <= 0) return;
             ctx.save();
@@ -367,7 +349,6 @@ import Info from "../../components/mdx/Info.astro";
             drawAmbient();
             drawHorizonGlow(currentTime);
         }
-        // ----- 自适应 -----
         function resizeCanvas() {
             if (!canvas || !canvas.parentElement) return;
             const container = canvas.parentElement;

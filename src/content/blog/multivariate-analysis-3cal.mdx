@@ -9,6 +9,7 @@ tags:
   - 多元统计分析
 categories:
   - 期末复习
+badge: ''
 ---
 import Warning from "../../components/mdx/Warning.astro";
 import Error from "../../components/mdx/Error.astro";
@@ -307,9 +308,11 @@ $$
 |\mathbf{M}| = |\mathbf{W}| \cdot \left| 1 - (-\mathbf{d}') \mathbf{W}^{-1} (n \mathbf{d}) \right| = |\mathbf{W}| \cdot \left| 1 + n \mathbf{d}' \mathbf{W}^{-1} \mathbf{d} \right|
 $$
 
-再按 **1 这个矩阵** 展开$$
+再按 **1 这个矩阵** 展开
+$$
 |\mathbf{M}| = |1| \cdot |\mathbf{W} - (n\mathbf{d}) \cdot 1 \cdot (-\mathbf{d}')| = |\mathbf{W} + n \mathbf{d} \mathbf{d}'|
-$$look familiar？$|\mathbf{M}| = |总离差| = |\mathbf{W} + n \mathbf{d} \mathbf{d}'|$，古人的智慧这一块。
+$$
+look familiar？$|\mathbf{M}| = |总离差| = |\mathbf{W} + n \mathbf{d} \mathbf{d}'|$，古人的智慧这一块。
 
 ---
 好了，两个式子连等，可以得到了这个：

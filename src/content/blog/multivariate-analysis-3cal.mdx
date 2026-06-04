@@ -1,0 +1,403 @@
+---
+title: 多元统计分析-第三章计算详解
+description: 包括了（简答题）和（计算题的详解）
+pubDate: 2026-06-04T16:39
+image: >-
+  https://origin.picgo.net/2026/06/04/lab.magiconch.com-17805627449778005bc06ce4f85c1.jpg
+draft: false
+tags:
+  - 多元统计分析
+categories:
+  - 期末复习
+---
+import Warning from "../../components/mdx/Warning.astro";
+import Error from "../../components/mdx/Error.astro";
+
+# 例题
+
+1. 已知总体 $\mathbf{X} \sim N_2(\boldsymbol{\mu}, \boldsymbol{\Sigma})$，样本 $\mathbf{x}' = \begin{bmatrix} 2 & 8 & 6 & 8 \\ 12 & 9 & 9 & 10 \end{bmatrix}$，现进行如下检验
+$$
+H_0: \boldsymbol{\mu}' = [7, 11]
+$$
+
+$$
+H_1: \boldsymbol{\mu}' \neq [7, 11]
+$$
+如果$F_{2,2,0.05} = 19$，$\frac{n+1-p}{pn} T^2(p, n) \sim F_{p, n+1-p}$，请回答如下问题
+## （1）计算 Hotelling $T^2$统计量；
+
+作为一个看完了前一篇文章的人，你应该知道了什么是 Hotelling $T^2$，所以直接写解题过程吧！
+
+开玩笑的，前面那么抽象，怎么看的懂嘛！那我们就来推导一下Hotelling $T^2$ 吧！（这里不是正经推导，正经的话是下一道证明题）
+
+### 一元均值的假设检验
+
+- 假设：$H_0: \mu = \mu_0,\ H_1: \mu \neq \mu_0$
+
+- 检验统计量：
+$$
+t = \frac{\bar{X} - \mu_0}{s/\sqrt{n}}
+$$
+
+这是我们一元的时候构建的统计量 $t$，来检验均值是否相等，其中
+$$
+\overline{X} = \frac{1}{n} \sum_{j=1}^n X_j, \quad s^2 = \frac{1}{n-1} \sum_{j=1}^n (X_j - \overline{X})^2
+$$
+不知道你对这个熟不熟悉🤔
+
+总之，我们要从一元推广到多元，怎么办呢？先给 $t$ 来换一种表示的方法：
+$$
+t = \frac{(\overline{X} - \mu_0)}{s/\sqrt{n}} = \left[ n(\overline{X} - \mu_0)(s^2)^{-1}(\overline{X} - \mu_0) \right]^{\frac{1}{2}}
+$$
+这两部分是一模一样的，你可以将**右边**化简得到**左边**。
+### Hotelling $T^2$统计量
+
+现在我们可以把它推广到多元了。把 t 平方一下，去掉 $\frac{1}{2}$
+
+我们可以得到 Hotelling $T^2$统计量:
+$$
+T^2 =  n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{S}^{-1} (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)
+$$
+
+其中$\overline{\mathbf{X}} = \frac{1}{n} \sum_{j=1}^n \mathbf{X}_j$，$\mathbf{S} = \frac{1}{n-1} \sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'$ ，$j$ 是第 $j$ 次的观测样本，**$j$ 对应列号**。
+
+我来解释一下，这里的式子和上面的 $t$ 的转化形式是一样的，只是多元中并没有**矩阵的平方**，所以这里是 $(\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'$。
+
+而且这里也很形象，$t$ 平方不就变成了 $T^2$ 嘛！
+
+公式有了，至此，第一题就可以做了。
+
+---
+
+<Warning>
+
+注意这里 $\mathbf{x}' = \begin{bmatrix} 2 & 8 & 6 & 8 \\ 12 & 9 & 9 & 10 \end{bmatrix}$ ，$x$ 是个列向量 $\mathbf{x} =\begin{bmatrix}2 & 12 \\8 & 9 \\6 & 9 \\8 & 10\end{bmatrix}$ 第一列就是$X_1$,第二列就是$X_2$，即 p = 2（2维），n = 4（4组观测样本，每组2个值），但后面还是看横着的好理解。
+
+</Warning>
+
+## 计算 $\bar{\mathbf{X}}$
+
+$$
+\bar{\mathbf{X}} =\begin{bmatrix} \frac{(2 + 8 + 6 + 8)}{4} \\ \frac{(12 + 9 + 9 + 10)}{4} \end{bmatrix} = \begin{bmatrix} \frac{24}4 \\ \frac{40}4 \end{bmatrix} = \begin{bmatrix} 6 \\ 10 \end{bmatrix}
+$$
+
+
+## 计算 $(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)$
+
+原假设说了 $\boldsymbol{\mu}'  = {\mu}_0 (就是符号定义不一样)= \begin{bmatrix} 7 \\ 11 \end{bmatrix}$，因此 $(\overline{\mathbf{X}} - \boldsymbol{\mu}_0) = \begin{bmatrix} 6 - 7 \\ 10 - 11 \end{bmatrix} = \begin{bmatrix} -1 \\ -1 \end{bmatrix}$
+
+## 计算样本协方差矩阵 $S$
+
+我们知道 ：$\mathbf{x}' = \begin{bmatrix} 2 & 8 & 6 & 8 \\ 12 & 9 & 9 & 10 \end{bmatrix}$，$\mathbf{S} = \frac{1}{n-1} \sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'$
+
+还记得 $j$ 对应列号嘛，这里就一列一列带进去就好了
+
+
+- $j = 1$:$\begin{bmatrix} 2 - 6 \\ 12 - 10 \end{bmatrix} = \begin{bmatrix} -4 \\ 2 \end{bmatrix}$
+
+- $j = 2$:$\begin{bmatrix} 8 - 6 \\ 9 - 10 \end{bmatrix} = \begin{bmatrix} 2 \\ -1 \end{bmatrix}$
+
+- $j = 3$:$\begin{bmatrix} 6 - 6 \\ 9 - 10 \end{bmatrix} = \begin{bmatrix} 0 \\ -1 \end{bmatrix}$
+
+- $j = 4$:$\begin{bmatrix} 8 - 6 \\ 10 - 10 \end{bmatrix} = \begin{bmatrix} 2 \\ 0 \end{bmatrix}$
+
+然后乘起来 ：$(\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'$
+
+对于 $j=1$:
+$$
+\begin{bmatrix} -4 \\ 2 \end{bmatrix} \begin{bmatrix} -4 & 2 \end{bmatrix} = \begin{bmatrix} (-4)(-4) & (-4)(2) \\ (2)(-4) & (2)(2) \end{bmatrix} = \begin{bmatrix} 16 & -8 \\ -8 & 4 \end{bmatrix}
+$$
+
+对于$j=2$:
+$$
+\begin{bmatrix} 2 \\ -1 \end{bmatrix} \begin{bmatrix} 2 & -1 \end{bmatrix} = \begin{bmatrix} 4 & -2 \\ -2 & 1 \end{bmatrix}
+$$
+
+对于$j=3$:
+$$
+\begin{bmatrix} 0 \\ -1 \end{bmatrix} \begin{bmatrix} 0 & -1 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}
+$$
+
+对于$j=4$:
+$$
+\begin{bmatrix} 2 \\ 0 \end{bmatrix} \begin{bmatrix} 2 & 0 \end{bmatrix} = \begin{bmatrix} 4 & 0 \\ 0 & 0 \end{bmatrix}
+$$
+
+最后加起来：
+
+$$
+\sum_{j=1}^{4} (\mathbf{x}_j - \bar{\mathbf{x}})(\mathbf{x}_j - \bar{\mathbf{x}})' = \begin{bmatrix} 24 & -10 \\ -10 & 6 \end{bmatrix}
+$$
+
+除以$n-1=3$得样本协方差矩阵：
+
+$$
+\mathbf{S} = \frac{1}{3} \begin{bmatrix} 24 & -10 \\ -10 & 6 \end{bmatrix} = \begin{bmatrix} 8 & -\frac{10}{3} \\ -\frac{10}{3} & 2 \end{bmatrix}
+$$
+
+### 计算 Hotelling $T^2$统计量；
+
+好了，现在可以算统计量的值了...
+
+看一下公式：
+$$
+T^2 =  n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{S}^{-1} (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)
+$$
+
+好的，先算个$S^{-1}$:
+$$
+S^{-1} = \frac{9}{44} \begin{bmatrix} 2 & \frac{10}{3} \\ \frac{10}{3} & 8 \end{bmatrix} = \mathbf{S}^{-1} = \frac{1}{22} \begin{bmatrix} 9 & 15 \\ 15 & 36 \end{bmatrix}
+$$
+
+代入：
+
+$$
+T^2 = 4 \cdot \left( \begin{bmatrix} -1 & -1 \end{bmatrix} \cdot \frac{1}{22} \begin{bmatrix} 9 & 15 \\ 15 & 36 \end{bmatrix} \cdot \begin{bmatrix} -1 \\ -1 \end{bmatrix} \right) = \frac{150}{11}
+$$
+
+
+
+## （2）在$\alpha = 0.05$水平下检验$H_0$。
+
+### Hotelling $T^2$的性质
+
+知道了统计量，那这个统计量服从什么分布呢？难到又要一群人研究一个新的分布，然后再画张图吗？可以不用，因为~~这样老师就出不了题目了~~：
+
+$\frac{(n-p)}{(n-1)p} T^2$与$F_{p,n-p}$ 同分布。
+
+$F_{p,n-p}$ 是服从自由度为 $p$ 和 $n-p$ 的 $F$ 分布随机变量。那 $F$ 统计量是...这里我们不需要算 $F$ 统计量的值，只是用它的分布，所以就不用管了。
+
+再者，这里是**统计量越大越拒绝原假设**。
+
+---
+<Error>
+
+$\frac{n+1-p}{pn} T^2(p, n) \sim F_{p, n+1-p}$，题目里虽然写的是这个，但是你带入p和n，显然服从的是 $F_{2, 3}$，题目没给这个的5%的值啊，所以应该是笔误吧(艹皿艹 )
+
+</Error>
+
+所以：
+
+$$
+\frac{(n-p)}{(n-1)p} T^2 = \frac 13 T^2 = F_{p,n-p} = F_{2,2}
+$$
+
+$$
+T^2 = F = \frac{1}{3} \times \frac{150}{11} = \frac{50}{11} \approx 4.5455
+$$
+
+临界值$F_{2,2,0.05} = 19$。由于 $4.5455 < 19$，不能拒绝原假设。
+
+## 结论
+
+在显著性水平 $\alpha = 0.05$下, 没有足够证据表明总体均值向量$\mu$与$[7,11]'$ 有显著差异。
+
+---
+# 似然比法的原理及性质。
+
+**原理**：
+令$\Theta$表示参数$\boldsymbol{\theta}$的取值范围，$\Theta_0$表示$H_0$限定下参数$\boldsymbol{\theta}$的取值范围，则当
+$$
+\Lambda = \frac{\max_{\boldsymbol{\theta} \in \Theta_0} L(\boldsymbol{\theta})}{\max_{\boldsymbol{\theta} \in \Theta} L(\boldsymbol{\theta})} < c \implies \text{拒绝} H_0
+$$
+
+其中，$L(\boldsymbol{\theta})$为似然函数，$c$为适当选定的常数。
+
+**性质**：  
+在大样本情形下，当原假设成立时，有 $-2\ln\Lambda \sim \chi^2_{v - v_0}$。其中，$v - v_0 = (\Theta\text{的维度}) - (\Theta_0\text{的维度})$。
+
+---
+# 例题
+
+令 $\mathbf{X} \sim N_p(\boldsymbol{\mu}, \boldsymbol{\Sigma})$，$\mathbf{X}_1, \mathbf{X}_2, \dots, \mathbf{X}_n$为其随机样本。样本均值为$\overline{\mathbf{X}}$，样本协方差矩阵为 $\mathbf{S}$，并且 $\mathbf{W} \equiv (n-1)\mathbf{S} \sim W_p(n-1, \boldsymbol{\Sigma})$，$\overline{\mathbf{X}}$与$\mathbf{S}$独立。请证明以下结论：
+
+## (1)$\underbrace{\sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu}_0)(\mathbf{X}_j - \boldsymbol{\mu}_0)'}_{总离差} = \underbrace{\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'}_{组内差（\mathbf{W}）} + \underbrace{n(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)'}_{组间差}$
+第一题虽然有一大坨内容，但是还是很好写的，因为不需要什么多元的知识就可以做了。
+
+$$
+\sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu}_0)(\mathbf{X}_j - \boldsymbol{\mu}_0)'
+$$
+$$
+= \sum_{j=1}^n \left[ (\mathbf{X}_j - \overline{\mathbf{X}}) + (\overline{\mathbf{X}} - \boldsymbol{\mu}_0) \right] \left[ (\mathbf{X}_j - \overline{\mathbf{X}}) + (\overline{\mathbf{X}} - \boldsymbol{\mu}_0) \right]'
+$$
+这一步很好理解，两项里面减一个加一个$\overline{\mathbf{X}}$不改变原式，然后两两看成一个整体。
+
+之后对着里面做类似于 $(a+b)(a+b) = a^2 +b^2+ab+ba$ 这样的分解。
+
+$$
+= \sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})' + \sum_{j=1}^n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)'
+$$
+$$
++\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' + \sum_{j=1}^n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)(\mathbf{X}_j - \overline{\mathbf{X}})'
+$$
+
+一共拆成了4项，我们一项一项来看。
+
+## $\sum_{j=1}^{n} (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'$
+
+这一项我没看出来什么，所以保留。
+
+## $\sum_{j=1}^n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)$
+
+这里的 $\overline{\mathbf{X}}$ 和 ${\mu}_0$ 都是常数，所以求和就是 n倍 的他们。
+
+所以 $\sum_{j=1}^{n} (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})' = n ({\overline{X}} - \mu_0) ({\overline{X}} - \mu_0)'$
+
+## $\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)'$
+
+孩子们， $\overline{\mathbf{X}}$ 和 ${\mu}_0$ 是常数。所以可以提出去。
+
+所以 $\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' = \left( \sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}}) \right) (\overline{\mathbf{X}} - \mu_0)'$
+
+那这一坨等于什么呢？$( \sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})$，很简单，还是继续打开。
+
+$$
+\sum_{j=1}^n (\mathbf{X}_j - {\overline{\mathbf{X}}}) = \sum_{j=1}^n \mathbf{X}_j - n {\overline{\mathbf{X}}} = n {\overline{\mathbf{X}}} - n {\overline{\mathbf{X}}} = 0
+$$
+
+**另一项也同理值为0**
+
+所以答案就出来了。
+
+题目说样本协方差矩阵为 $\mathbf{S}$，并且 $\mathbf{W} \equiv (n-1)\mathbf{S} \sim W_p(n-1, \boldsymbol{\Sigma})$
+所以 $W = {\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'}$
+
+所以得出结论。
+$$
+\underbrace{\sum_{j=1}^n (\mathbf{X}_j - \boldsymbol{\mu}_0)(\mathbf{X}_j - \boldsymbol{\mu}_0)'}_{总离差} = \underbrace{\sum_{j=1}^n (\mathbf{X}_j - \overline{\mathbf{X}})(\mathbf{X}_j - \overline{\mathbf{X}})'}_{组内差（\mathbf{W}）} + \underbrace{n(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)'}_{组间差}
+$$
+
+
+## (2)$|\text{总离差}| = |\mathbf{W}| + |\mathbf{W}| \, n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{W}^{-1} (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)$
+
+设 $\mathbf{d} = \overline{\mathbf{X}} - \boldsymbol{\mu}_0$，则 总离差 = $\mathbf{W} + n\mathbf{d}\mathbf{d}'$。（设为d，只是不想写太多）
+考虑这样一个矩阵：
+
+$$
+\mathbf{M} = \begin{bmatrix}
+1 & -\mathbf{d}' \\
+n\mathbf{d} & \mathbf{W}
+\end{bmatrix}
+$$
+其中：
+-  1 (标量)
+-  $-\mathbf{d}'$ ($1 \times p$行向量)
+- $n\mathbf{d}$ ($p \times 1$列向量)
+- $\mathbf{W}$ ($p \times p$ 矩阵)
+
+别问为什么要考虑这个，问就是"古人的智慧"（doge）
+
+---
+
+老师在 ppt 里给出了这样的计算公式：
+
+分块矩阵行列式展开公式：可以按A展开，或者按D展开
+$$
+\begin{vmatrix} A & B \\ C & D \end{vmatrix} = |A| \cdot |D - CA^{-1}B| = |D| \cdot |A - B D^{-1} C|
+$$
+
+
+老师的矩阵全是AAAA，看花了，这里改成ABCD。
+
+---
+
+同样的，我们对 M 求行列式。这里先按 **W 这个矩阵** 展开
+
+$$
+|\mathbf{M}| = |\mathbf{W}| \cdot \left| 1 - (-\mathbf{d}') \mathbf{W}^{-1} (n \mathbf{d}) \right| = |\mathbf{W}| \cdot \left| 1 + n \mathbf{d}' \mathbf{W}^{-1} \mathbf{d} \right|
+$$
+
+再按 **1 这个矩阵** 展开$$
+|\mathbf{M}| = |1| \cdot |\mathbf{W} - (n\mathbf{d}) \cdot 1 \cdot (-\mathbf{d}')| = |\mathbf{W} + n \mathbf{d} \mathbf{d}'|
+$$look familiar？$|\mathbf{M}| = |总离差| = |\mathbf{W} + n \mathbf{d} \mathbf{d}'|$，古人的智慧这一块。
+
+---
+好了，两个式子连等，可以得到了这个：
+
+$$
+|总离差| = |W + n d d'| = |W| \left|1 + n d' W^{-1} d\right|
+$$
+
+感觉和题目要求证明的差了一个括号？我们这里 $|1 + n d' W^{-1} d|$ 是模。可以直接改成括号吗？怎么感觉不太对呢？
+
+怎么不对！对的对的。我们来分析一下：
+
+- 1 是 $1 \times 1$
+- n 是 $1 \times 1$
+- $d'$ 是 $1 \times p$
+- $W^{-1}$ 是 $p \times p$
+- $d'$ 是 $p \times 1$
+
+最后乘起来再加起来就是一个标量，所以模什么的，直接变成括号就好了。
+
+$$
+|W + n d d'| = |W| \left(1 + n d' W^{-1} d\right)
+$$
+
+然后再把|W|乘进去，d 用 $\overline{\mathbf{X}} - \boldsymbol{\mu}_0$ 换掉。
+
+$$
+\left| 总离差 \right| = \left| \mathbf{W} \right| + \left| \mathbf{W} \right| \cdot n \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)' \mathbf{W}^{-1} \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)
+$$
+证明完毕。
+
+## (3) 统计量$T^2 = n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{S}^{-1} (\overline{\mathbf{X}} - \boldsymbol{\mu}_0) \sim T^2(p, n-1)$
+
+你看了这个题目，你可能会问：它让我证明的是什么？这个分布不就是 Hotelling $T^2$分布吗？其实我们还没证明。
+
+在上一章的简答题里，老师给出了Hotelling $T^2$ 分布的定义：
+
+设 $\mathbf{X} \sim N_p(\mathbf{0}, \boldsymbol{\Sigma})$，$\mathbf{Y} \sim W_p(n, \boldsymbol{\Sigma})$ 且独立，则 $T^2 = n \mathbf{X}' \mathbf{Y}^{-1} \mathbf{X} \sim T^2(p, n)$。
+
+所以这里说人话就是让我们把 $n (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{S}^{-1} (\overline{\mathbf{X}} - \boldsymbol{\mu}_0)$ 变形变形，写成一个Hotelling $T^2$ 分布的形式。
+
+---
+
+题目已经给了p = p 和 n = n - 1，所以带入，我需要凑出这样的形式：
+$$
+T^2 = (n-1) \mathbf{X}' \mathbf{Y}^{-1} \mathbf{X} \sim T^2(p, n-1)
+$$
+
+其中：$\mathbf{X} \sim N_p(\mathbf{0}, \boldsymbol{\Sigma})$，$\mathbf{Y} \sim W_p(n-1, \boldsymbol{\Sigma})$ 
+
+---
+
+所以借助一下"古人的智慧":
+$$
+原式 = \sqrt{n} \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)' \left({S} \right)^{-1} \sqrt{n} \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)
+$$
+这没问题吧，只是把 n 掰开了
+
+这里也有个结论：$\sqrt{n}(\overline{\mathbf{X}} - \mu_0) \sim N_p(\mathbf{0}, \boldsymbol{\Sigma})$，所以这就是我们要的 $X$
+
+---
+那 $Y$ 呢？注意题目给了一个条件：$\mathbf{W} \equiv (n-1)\mathbf{S} \sim W_p(n-1, \boldsymbol{\Sigma})$
+
+所以 $Y$ 也很好构造了。
+
+$$
+S = \frac{1}{n-1} W
+$$
+代入后：
+$$
+原式 = \sqrt{n} \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)' \left[ \frac{1}{n-1} W \right]^{-1} \sqrt{n} \left( \overline{\mathbf{X}} - \boldsymbol{\mu}_0 \right)'
+$$
+
+把$\frac{1}{n-1}$放外面，即可得到：
+
+$$
+T^2 = n(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)' \mathbf{S}^{-1}(\overline{\mathbf{X}} - \boldsymbol{\mu}_0) = (n-1)\left[\sqrt{n}(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)\right]' \mathbf{W}^{-1}\left[\sqrt{n}(\overline{\mathbf{X}} - \boldsymbol{\mu}_0)\right] \sim T^2(p, n-1)
+$$
+得证。
+
+---
+# 方差不齐对多元方差分析的影响。
+
+- 在大样本情形下，即使“方差”不齐，多元方差分析的检验结果仍具有相当的稳健性。
+
+- 当样本量相等时，“方差”不齐对检验结果的影响也较小，即仍可继续进行多元方差分析。
+
+# 多元方差分析的定义。
+
+多元方差分析是一元方差分析向多维的推广，用于检验不同总体均值向量之间是否存在差异。
+包括单因素多元方差分析和双因素多元方差分析

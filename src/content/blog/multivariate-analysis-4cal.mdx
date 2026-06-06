@@ -1,0 +1,511 @@
+---
+title: 多元统计分析-第四章计算详解
+description: 包括了（简答题）和（计算题的详解）
+pubDate: 2026-06-06T21:00
+image: https://origin.picgo.net/2026/06/06/download6478aff3537571ff.jpg
+draft: false
+tags: []
+categories:
+  - 期末复习
+---
+import Info from "../../components/mdx/Info.astro";
+# 一般回归模型和线性回归模型的关系
+
+般回归模型的目标是寻找一个自变量都的函数，使得它在均方误差意义下对**因变量**的预测最优。
+
+而线性回归视为一般线性模型的一个特例。
+
+当我们在一般线性模型中只关注**连续型因变量**与**自变量**的线性关系时，一般线性模型就可以称为一个线性回归模型。
+
+线性回归模型通常假设**因变量的条件均值**是**自变量**的线性组合，并且**误差项符**合**正态分布且独立同分布**。
+
+# 投影
+
+在 $\mathbb{R}^n$中，给定一个向量$\mathbf{a}$及子空间$W$，如果在 $W$中存在向量$\mathbf{b}$使
+$$
+\|\mathbf{a} - \mathbf{b}\| = \inf_{\mathbf{x} \in W} \|\mathbf{a} - \mathbf{x}\|
+$$
+则称 $\mathbf{b}$是$\mathbf{a}$在$W$中的投影。$\mathbf{b}$是$\mathbf{a}$在$W$上的投影$\iff \mathbf{b} \in W$且$\mathbf{a} - \mathbf{b}$与$W$中所有向量正交
+
+# 投影矩阵
+
+在$\mathbb{R}^n$中，设$W$是由向量$\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_r$张成的子空间，则$W$上的投影矩阵为$\mathbf{P} = \mathbf{A}(\mathbf{A}'\mathbf{A})^{-1}\mathbf{A}'$。其中，$\mathbf{A} = \begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \cdots & \mathbf{a}_r \end{bmatrix}$。
+
+---
+# 例题
+
+请推导线性回归模型 $\boldsymbol{Y} = \boldsymbol{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}$ 的最小二乘估计量。
+
+## 线性回归模型
+
+现在，我们先来了解一下回归模型。
+
+---
+
+回归分析：通过一组**自变量**(预测变量)来预测一个或者多个**因变量**(预测变量)的统计方法。也可用于评估预测变量对响应变量的影响。
+
+$r$ 个自变量 $x_1, x_2, \cdots, x_r$，因变量 $Y$。
+- 例：$Y=$住房的当前市值，$x_1=$居住面积，$x_2=$位置，$x_3=$去年的评估价值，$x_4=$建筑质量
+
+$Y = 均值 + 随机误差 \epsilon$ 
+  - 均值：预测变量的连续函数（固定值）  
+  - 误差$\epsilon$：测量误差和其余未被考虑的变量所产生的效应（随机变量）。
+
+---
+
+式子列出来就是这样：
+
+单个响应的线性回归模型：$Y = \beta_0 + \beta_1 x_1 + \cdots + \beta_p x_p + \epsilon$
+
+你可以把它看作是一个**非中心化的AR模型**，只是**自变量**是**因素**而不是**时间**。
+$\beta$ 和 $\epsilon$ 是**未知量**是要求解的，其他的是可以观测得到。
+
+---
+
+这里只有一次观测，那观察多次呢？
+### Y 的 $n$ 个观测值与因变量的联系
+$$
+\begin{align*}
+Y_1 &= \beta_0 + \beta_1 x_{11} + \beta_2 x_{12} + \cdots + \beta_r x_{1r} + \epsilon_1 \\
+Y_2 &= \beta_0 + \beta_1 x_{21} + \beta_2 x_{22} + \cdots + \beta_r x_{2r} + \epsilon_2 \\
+&\vdots \\
+Y_n &= \beta_0 + \beta_1 x_{n1} + \beta_2 x_{n2} + \cdots + \beta_r x_{nr} + \epsilon_n
+\end{align*}
+$$
+### 关于误差项 $\epsilon$ 的假定
+
+- $E(\epsilon_j) = 0$
+- $Var(\epsilon_j) = \sigma^2$
+- $Cov(\epsilon_j, \epsilon_k) = 0, \ j \neq k$
+
+这里的误差项可以看作是**白噪声序列**，两者性质是一样的。
+
+---
+
+总所周知，数学家都很懒，对于上面的 **Y 的 $n$ 个观测值与预测变量的联系** 那么长的式子，证明题里不得抄到累死。所以为了省力，有以下简洁的记法：
+### 经典线性回归模型（矩阵形式）
+
+$$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$$
+
+$$E(\boldsymbol{\epsilon}) = \mathbf{0}, \quad Cov(\boldsymbol{\epsilon}) = \sigma^2 \mathbf{I}$$
+
+其中$\boldsymbol{\beta}$和$\sigma^2$为未知参数。
+
+$$
+\begin{bmatrix}Y_1 \\Y_2 \\\vdots\\Y_n\end{bmatrix}=\begin{bmatrix}1 & x_{11} & x_{12} & \cdots & x_{1r} \\1 & x_{21} & x_{22} & \cdots & x_{2r} \\\vdots & \vdots & \vdots & \ddots & \vdots \\1 & x_{n1} & x_{n2} &\cdots & x_{nr}\end{bmatrix}\begin{bmatrix}\beta_0 \\\beta_1\\\vdots\\\beta_r\end{bmatrix}+\begin{bmatrix}\epsilon_1 \\\epsilon_2\\\vdots \\\epsilon_n\end{bmatrix}
+$$
+
+---
+
+好了，至此，我们知道了题目的前半句的含义，那后半句是说什么？以及这道题目是想让我们干什么？
+
+说人话就是在矩阵形式的线性回归模型 $Y=Xβ+ε$ 中，求出参数向量 $β$ 的最小二乘估计量，并写出它的表达式。
+## 最小二乘估计量
+
+最小二乘法：寻找合适的$\boldsymbol{\beta}$值，使得函数
+$$
+\begin{aligned}
+S(\boldsymbol{\beta}) &= \sum_{j=1}^n \left(y_j - (\beta_0 + \beta_1 x_{j1} + \beta_2 x_{j2} + \cdots + \beta_r x_{jr})\right)^2 = (\boldsymbol{Y} - \boldsymbol{X}\boldsymbol{\beta})'(\boldsymbol{Y} - \boldsymbol{X}\boldsymbol{\beta})=\epsilon'\epsilon
+\end{aligned}
+$$
+达到最小，记为$\hat{\boldsymbol{\beta}}$，称为$\boldsymbol{\beta}$的最小二乘估计。
+
+---
+怎么理解呢？
+$y_j - (\beta_0 + \beta_1 x_{j1} + \beta_2 x_{j2} + \cdots + \beta_r x_{jr})$ 这个相当是一个**真实值**和**拟合值**的**残差**。
+
+这里残差有正有负，要是直接加起来，可能会抵消，所以还要加个平方，最后再加起来。
+
+因为是残差平方和嘛，所以肯定是越小越好的呗！用数学语言表达就是：
+
+$$
+\hat{\boldsymbol{\beta}} = \arg \min_{\mathbf{b}} S(\mathbf{b}) = (\mathbf{Y} - \mathbf{Xb})'(\mathbf{Y} - \mathbf{Xb}) \quad (\text{残差平方和最小})
+$$
+这里的 b 是 $\boldsymbol{\beta}$ 的一个估计值。就相当于设了一个变量，因为还没求出来。
+
+---
+
+我们先不证明，先给出最小二乘的结果。
+$$
+\hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}
+$$
+代入这个结果来预测以下 Y：（最优的没误差项了）
+
+$$
+\hat{\mathbf{Y}} = \mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'Y
+$$
+这个时候我们可以把Y前面的东西提取出来，命名为H。
+$$
+\mathbf{H} \equiv \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}' \text{ 为自变量空间的投影矩阵。}
+$$
+## 投影矩阵
+
+看一下老师的定义：
+
+投影矩阵：在 $\mathbb{R}^n$中，设 $W$ 是由向量$\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_r$张成的子空间，则$W$上的投影矩阵为$\mathbf{P} = \mathbf{A}(\mathbf{A}'\mathbf{A})^{-1}\mathbf{A}'$。其中，$\mathbf{A} = \begin{bmatrix} \mathbf{a}_1,\mathbf{a}_2,\cdots,\mathbf{a}_r \end{bmatrix}$。
+
+文字可能很抽象，我们来画张图片：
+
+![Pasted image 20260606151811](https://origin.picgo.net/2026/06/06/Pasted-image-20260606151811fa03d42fef6be5f3.png)
+
+这个红色的空间就是 $W$，而投影矩阵所做的事就是把 **红色的向量** 投影到 $W$ 这个空间，变为 橙色的节点。
+
+所以对于 $\forall \mathbf{a} = \mathbf{u} + \mathbf{v}: \mathbf{u} \in W, \mathbf{v} \perp W$，有 $\mathbf{P}\mathbf{a} = \mathbf{u}$。，因为v垂直，投影后长度为0。
+
+投影矩阵还有一些比较好的性质：$P' = P, \, P^n = P$
+
+## 最小二乘估计量的推导
+
+绕了这么远，就是因为我们要用投影矩阵来推导最小二乘估计量。
+
+我们把 $\boldsymbol{X}\boldsymbol{\beta}$ 看作矩阵 $\boldsymbol{X}$ 的列空间 $\mathcal{CXK}(\boldsymbol{X})$ 中的所有向量。
+
+<Info>
+
+$\mathcal{CXK}(\boldsymbol{X})$ 是什么？为什么我想起了一位故人...
+
+$\mathcal{CXK}(\boldsymbol{X})$ 就是由所有可能的 $Xβ$ 向量 或者说是 $X$ 组成的向量空间。因为乘 $β$ 只是让他在原有的空间内做变换，不会变幻整个空间。
+
+所以你取什么名字都可以，我瞎取的。
+
+</Info>
+
+最小二乘目标是让残差平方和最小:
+$$
+\hat{\boldsymbol{\beta}} = \arg \min_{\mathbf{b}} S(\mathbf{b}) = (\mathbf{Y} - \mathbf{Xb})'(\mathbf{Y} - \mathbf{Xb}) \quad (\text{残差平方和最小})
+$$
+
+我们可以在 $\mathcal{CXK}(\boldsymbol{X})$ 空间中找到一个 $\boldsymbol{X}\boldsymbol{\beta} =\hat{\mathbf{Y}}$ (拟合值)使它与 $Y$ (实际值)的欧氏距离最短。
+
+这个最优值在集合上是明确的，就是：从 $\boldsymbol{Y}$ 向子空间 $\mathcal{CXK}(\boldsymbol{X})$ 作垂线，垂足 $\boldsymbol{\hat{Y}}$ 就是最优拟合值。
+
+![Pasted image 20260606151811](https://origin.picgo.net/2026/06/06/Pasted-image-20260606151811fa03d42fef6be5f3.png)
+
+正好，这也可以让投影矩阵大展身手。
+
+---
+
+定义投影矩阵：
+$$
+\boldsymbol{P} = \boldsymbol{X}(\boldsymbol{X}'\boldsymbol{X})^{-1}\boldsymbol{X}'
+$$
+那么：
+$$
+X\hat{\beta} = \hat{Y} = PY
+$$
+
+$PY$ 就是 $Y$ 到 ~~蔡徐坤空间~~ 的投影 $\hat{Y}$ 它是由 $X\hat{\beta}$ 构成的预测值。
+
+我们代入 $P$ 的表达式:
+$$
+\boldsymbol{X}\hat{\boldsymbol{\beta}} = \boldsymbol{X}(\boldsymbol{X}'\boldsymbol{X})^{-1}\boldsymbol{X}'\boldsymbol{Y}
+$$
+
+两边左乘$\boldsymbol{X}'$：
+$$
+\boldsymbol{X}'\boldsymbol{X}\hat{\beta} = \boldsymbol{X}'\boldsymbol{X}(\boldsymbol{X}'\boldsymbol{X})^{-1}\boldsymbol{X}'\boldsymbol{Y}
+$$
+由于 $\boldsymbol{X}'\boldsymbol{X}$ 可逆，两边再同时左乘上 $(\boldsymbol{X}'\boldsymbol{X})^{-1}$ 得
+$$
+\hat{\beta} = (\boldsymbol{X}'\boldsymbol{X})^{-1}\boldsymbol{X}'\boldsymbol{Y}
+$$
+
+于是我们推导好了。
+
+---
+# OLS 估计量(普通最小二乘估计量)的含义及优良性
+
+$$
+\hat{\boldsymbol{\beta}} = \arg \min_{\mathbf{b}} S(\mathbf{b}) = (\mathbf{Y} - \mathbf{Xb})'(\mathbf{Y} - \mathbf{Xb}) \quad (\text{残差平方和最小})
+$$
+由投影的定义，有$\mathbf{X}\hat{\boldsymbol{\beta}} = \mathbf{H}\mathbf{Y} \implies \hat{\boldsymbol{\beta}} = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}$。
+
+其中，$\mathbf{H} \equiv \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'$为自变量空间的投影矩阵。
+
+- **优良性**：
+  - 无偏性：若满足一定基本假设，则$E(\hat{\beta}|X) = \beta$。
+  - 一致性：若满足一定假设，且当样本量 $n \to \infty$时，有$\hat{\beta} \to \beta$。
+  - 最优线性无偏估计 (BLUE)：根据高斯-马尔科夫定理，在所有线性无偏估计量中，OLS 估计量的方差最小。
+
+# 线性回归模型中两种平方和分解的形式
+
+1. 由 $\mathbf{Y} = \hat{\mathbf{Y}} + (\mathbf{Y} - \hat{\mathbf{Y}})$及投影的性质，有$\mathbf{Y}'\mathbf{Y} = \hat{\mathbf{Y}}'\hat{\mathbf{Y}} + (\mathbf{Y} - \hat{\mathbf{Y}})'(\mathbf{Y} - \hat{\mathbf{Y}})$
+
+2. 由 $\mathbf{Y} - \mathbf{1}\overline{Y} = (\hat{\mathbf{Y}} - \mathbf{1}\overline{Y}) + (\mathbf{Y} - \hat{\mathbf{Y}})$及投影的性质，有
+$$\underbrace{(\mathbf{Y} - \mathbf{1}\overline{Y})'(\mathbf{Y} - \mathbf{1}\overline{Y})}_{\text{总平方和（SST）}} = \underbrace{(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})'(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})}_{\text{回归平方和（SSR）}} + \underbrace{(\mathbf{Y} - \hat{\mathbf{Y}})'(\mathbf{Y} - \hat{\mathbf{Y}})}_{\text{残差平方和（SSE）}}
+$$
+
+
+
+# 例题
+
+已知均方误差 $MSE(g) = E\left(Y - g(\mathbf{X})\right)^2$。证明：$E(Y|\mathbf{X}) = \arg \min_{g} MSE(g)$。
+
+
+先翻译成人话：那我问你：条件期望 $E(Y|\mathbf{X})$ 是让 MSE 取得最小的那个 g 函数吗？
+## 重期望定理
+
+$$
+E[E[Y|X]] = E[Y]
+$$
+纯背的，没什么好说的，除非你想知道这么来的。
+
+## 推导
+
+我既然说了重期望法则，那说明肯定要用到，所以，还是和之前一样的构造，加一个减一个。
+
+$$
+Y - g(\mathbf{X}) = (Y - E[Y|\mathbf{X}]) + (E[Y|\mathbf{X}] - g(\mathbf{X}))
+$$
+平方算出来：
+$$
+(Y - g(\mathbf{X}))^2 = (Y - E[Y|\mathbf{X}])^2 + (E[Y|\mathbf{X}] - g(\mathbf{X}))^2 + 2(Y - E[Y|\mathbf{X}])(E[Y|\mathbf{X}] - g(\mathbf{X}))
+$$
+再取期望，搞出MSE：
+$$
+\text{MSE}(g) = E\left[(Y - E[Y|X])^2\right] + E\left[(E[Y|X] - g(\mathbf{X}))^2\right] + 2E\left[(Y - E[Y|X])(E[Y|X] - g(\mathbf{X}))\right]
+$$
+我们还是一项一项看：
+
+### 交叉项： $E\left[(Y - E[Y|X])(E[Y|X] - g(\mathbf{X}))\right]$
+
+这里，设 $E[(Y - E[Y|X])(E[Y|X] - g(X))] = E(U)$ (内部为U)
+那么利用一下重期望定理：
+
+$$
+E(U) = E[E(U|X)] = E\left[ E\left[ (Y - E[Y \mid X])(E[Y \mid X] - g(X)) \mid X \right] \right]
+$$
+
+我们做重期望是为了把 X 放入内层期望中，所以我们主要看**内层**。
+$$
+E\left[ (Y - E[Y \mid X])(E[Y \mid X] - g(X)) \mid X \right]
+$$
+这里，在给定 X 的条件下，可以把 $(E[Y|\mathbf{X}] - g(\mathbf{X}))$(第二项)看作常数，从而提到外面：
+$$
+E\left[(Y - E[Y|\mathbf{X}])(E[Y|\mathbf{X}] - g(\mathbf{X})) \mid \mathbf{X}\right] = (E[Y|\mathbf{X}] - g(\mathbf{X})) E\left[Y - E[Y|\mathbf{X}] \mid \mathbf{X}\right]
+$$
+在最后一项中：
+$$
+E\left[ Y - E[Y \mid X] \mid X \right] = E[Y \mid X] - E[Y \mid X] = 0
+$$
+
+也算是结论吧...所以交叉项为零。
+
+---
+
+### 其余项
+
+剩下的项写出来：
+$$
+\text{MSE}(g) = E\left[(Y - E[Y|\mathbf{X}])^2\right] + E\left[(E[Y|\mathbf{X}] - g(\mathbf{X}))^2\right]
+$$
+其中，第一项和 g(x) 无关，是固有的一项。
+而第二项是和 g(x) 有关的，而且第二项是平方项，所以非负。
+
+只要g(x)取的好，比如 $g(\mathbf{X}) = E[Y|\mathbf{X}]$ 时第二项为零，其他时候都大于0。
+
+因此：
+$$
+\text{MSE}(g) \geq E\left[(Y - E[Y|\mathbf{X}])^2\right] = \text{MSE}(E[Y|\mathbf{X}])
+$$
+等号成立当且仅当$g(\mathbf{X}) = E[Y|\mathbf{X}]$。
+
+MSE在ppt中没提及，以及这题结论比较多，没什么可以说的，只能背力。
+
+---
+
+# 例题
+
+已知均方误差 $MSE(\boldsymbol{\beta}) = E\left(Y - \mathbf{X}'\boldsymbol{\beta}\right)^2$，$\boldsymbol{\beta}^* = \left[E(\mathbf{X}\mathbf{X}')\right]^{-1} E(\mathbf{X}Y)$。证明
+## (1) $\boldsymbol{\beta}^* = \arg \min_{\boldsymbol{\beta}} MSE(\boldsymbol{\beta})$；
+
+翻译：$\boldsymbol{\beta}^*$ 是让 $MSE(\boldsymbol{\beta})$ 最小的那个 $\beta$ 吗？
+
+先展开平方项：
+
+$$
+\text{MSE}(\boldsymbol{\beta}) = E[Y^2 - 2 Y \mathbf{X}' \boldsymbol{\beta} + \boldsymbol{\beta}'\mathbf{X} \mathbf{X}' \boldsymbol{\beta}]
+$$
+<Info>
+
+$\mathbf{X}'\boldsymbol{\beta}$ 是一个标量，为了凑出 $\boldsymbol{\beta}^*$ 里面的形式，需要乘上$(\mathbf{X}'\boldsymbol{\beta})'$
+
+</Info>
+
+把期望打开：
+$$
+\text{MSE}(\boldsymbol{\beta}) = E[Y^2] - 2 E[Y \mathbf{X}'] \boldsymbol{\beta} + \boldsymbol{\beta}' E[\mathbf{X} \mathbf{X}'] \boldsymbol{\beta}
+$$
+
+<Info>
+
+为什么 $β$ 可以提到期望的外面？
+
+$β$是我们要评价的参数，不是随机变量，可以理解是待定的系数。
+
+</Info>
+
+要让 MSE 最小，那就对$β$求导呗：
+$$
+\frac{\partial \text{MSE}}{\partial \beta} = -2E[\mathbf{X}Y] + 2E[\mathbf{X}\mathbf{X}']\beta = \mathbf{0}
+$$
+
+稍微调一下位置：
+
+$$
+\beta = [E(\mathbf{X}\mathbf{X}')]^{-1} E(\mathbf{X}Y) = \beta^*
+$$
+
+还要补充一句：
+
+由于凸性，该点为全局最小值点，因此 $\beta^* = \arg \min_{\beta} \text{MSE}(\beta)$。
+## (2) 若 $Y = \boldsymbol{\beta}^{*'} \mathbf{X} + \varepsilon$，则 $E(\mathbf{X}\varepsilon) = \mathbf{0}$。
+
+正常的回归是：$\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$
+
+这里则是$Y = \boldsymbol{\beta}' \mathbf{X} + \varepsilon$，所以 $\boldsymbol{\beta}' \mathbf{X}$ 是一个标量。标量你转个置也没什么事情：$\beta^{*'} X = X' \beta^*$
+
+所以：
+$$
+Y = X' \beta^* + \varepsilon
+$$
+
+两边左乘 $\mathbf{X}$
+
+$$
+\mathbf{X}Y = \mathbf{X}\mathbf{X}'\boldsymbol{\beta}^* + \mathbf{X}\boldsymbol{\varepsilon}
+$$
+
+两边取期望
+$$
+E[XY] = E[XX']\beta^* + E[X\varepsilon]
+$$
+
+回顾上文，$[E(\mathbf{X}\mathbf{X}')]^{-1} E(\mathbf{X}Y) = \beta^*$，代入后上式后
+
+$$
+E[XY] = E[XY] + E[X\varepsilon] \implies E[X\varepsilon] = 0
+$$
+
+得证。
+
+
+# 例题
+
+令 $\widetilde{\boldsymbol{\beta}} = \mathbf{A}'\mathbf{Y}$为$\boldsymbol{\beta}$的任意线性无偏估计量，即$E(\widetilde{\boldsymbol{\beta}}|\mathbf{X}) = \boldsymbol{\beta}$，若 $\text{rank}(\mathbf{X}) = k + 1$，$E(\varepsilon| \mathbf{X}) = \mathbf{0}$，$E(\varepsilon\varepsilon'| \mathbf{X}) = \sigma^2\mathbf{I}$，证明：$\text{Cov}(\widetilde{\boldsymbol{\beta}}, \widetilde{\boldsymbol{\beta}}|\mathbf{X}) \geq \text{Cov}(\hat{\boldsymbol{\beta}}, \hat{\boldsymbol{\beta}}|\mathbf{X})$。
+
+代入 $Y = \mathbf{X}\boldsymbol{\beta}+\boldsymbol{\varepsilon}$
+$$
+E(\mathbf{A}'\mathbf{Y}|\mathbf{X}) = E(\mathbf{A}'(\mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon})|\mathbf{X})
+$$
+$$
+= E(A'X\beta \mid X) + E(A'\varepsilon \mid X)= \mathbf{A}'\mathbf{X}\boldsymbol{\beta}
+$$
+其中：
+- $E(A'\varepsilon \mid X) = A'E(\varepsilon \mid X) = A'0 = 0$
+- 给定 $\mathbf{X}$ 时，$\mathbf{A}$，$\mathbf{X}$，$\beta$是常数，所以：$E(\mathbf{A}'Y \mid \mathbf{X}) = \mathbf{A}'\mathbf{X}\beta$
+
+这里因为 $\widetilde{\boldsymbol{\beta}} = \mathbf{A}'\mathbf{Y}$
+
+所以 $E(\mathbf{A}'\mathbf{Y}|\mathbf{X}) = E(\widetilde{\boldsymbol{\beta}}\mid \mathbf{X}) = \mathbf{A}'\mathbf{X}\beta = \beta$
+
+所以得到 $\mathbf{A}'\mathbf{X} = \mathbf{I}$
+
+## 计算$\text{Cov}(\widetilde{\boldsymbol{\beta}}, \widetilde{\boldsymbol{\beta}}|\mathbf{X})$
+$$
+\begin{align*}
+\text{Cov}(\tilde{\beta}, \tilde{\beta} \mid X) &= \text{Cov}(A'Y, A'Y \mid X) \\
+&= A' \, \text{Cov}(Y, Y \mid X) \, A \\
+&= A' \, \text{Cov}(\varepsilon, \varepsilon \mid X) \, A \\
+&= A' \, \sigma^2 I \, A \\
+\end{align*}
+$$
+
+其中：
+- $\operatorname{Cov}(\mathbf{A}'\mathbf{Y} \mid \mathbf{X}) = \mathbf{A}' \operatorname{Cov}(\mathbf{Y} \mid \mathbf{X}) \mathbf{A}$ 这是一个运算法则，左乘原矩阵，右乘矩阵的转置。
+- 模型为$\boldsymbol{Y} = \boldsymbol{X}\beta + \varepsilon$，在给定 $\boldsymbol{X}$ 的条件下， $\boldsymbol{X}\beta$ 是常数，所以$\operatorname{Cov}(\boldsymbol{Y},\boldsymbol{Y} \mid \boldsymbol{X}) = \operatorname{Cov}(\varepsilon,\varepsilon \mid \boldsymbol{X})$
+
+
+## 计算$\text{Cov}(\hat{\boldsymbol{\beta}}, \hat{\boldsymbol{\beta}}|\mathbf{X})$
+
+$$
+\begin{align*}
+\text{Cov}(\hat{\beta}, \hat{\beta} \mid X) &= \text{Cov}\left( (X'X)^{-1} X'Y, (X'X)^{-1} X'Y \mid X \right) \\
+&= (X'X)^{-1} X' \, \text{Cov}(Y, Y \mid X) \, X (X'X)^{-1} \\
+&= \sigma^2 I \, (X'X)^{-1} X' \cdot X (X'X)^{-1} = (X'X)^{-1} \sigma^2 \\
+\end{align*}
+$$
+其中：
+- $\hat{\beta}$ 是之前算的最小二乘估计量，$\hat{\beta} = (X'X)^{-1}X'Y$
+- 模型为$\boldsymbol{Y} = \boldsymbol{X}\beta + \varepsilon$，在给定 $\boldsymbol{X}$ 的条件下， $\boldsymbol{X}\beta$ 是常数，所以$\operatorname{Cov}(\boldsymbol{Y},\boldsymbol{Y} \mid \boldsymbol{X}) = \operatorname{Cov}(\varepsilon,\varepsilon \mid \boldsymbol{X})$
+
+## 最后两者相减
+$$
+\begin{align*}
+\text{Cov}(\tilde{\beta}, \tilde{\beta} \mid X) - \text{Cov}(\hat{\beta}, \hat{\beta} \mid X) &= \sigma^2 \left( A'A - (X'X)^{-1} \right) \\
+&= \sigma^2 \left( A'A - I (X'X)^{-1} I \right) \\
+&= \sigma^2 A' [I - H] A \geq 0
+\end{align*}
+$$
+
+### 解释
+
+这里用到了前面得出的结论：$A'X = I$ ->  $X'A = I$
+
+$\sigma^2 \left( A'A - (X'X)^{-1} \right) \\= \sigma^2 \left( A'A - I (X'X)^{-1} I \right)$ 这里在 $(X'X)^{-1}$ 左右同乘单位阵。
+
+把结论代入：
+$$
+\sigma^2 \left( A'A - I (X'X)^{-1} I \right) = \sigma^2 \left( A'A - A'X(X'X)^{-1}X'A \right)
+$$
+
+这里是不是有点似曾相识？
+
+$$
+\mathbf{H} \equiv \mathbf{X}(\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}' \text{ 为自变量空间的投影矩阵。}
+$$
+是的，我们的call back来了，这是投影矩阵。
+
+化简后得到的这个 $\sigma^2 A' [I - H] A \geq 0$
+
+大于等于0什么的就不证明了，毕竟你都看到这了，记一下不是轻而易举（雾）
+
+---
+
+# 常用残差诊断图的作用及诊断方法
+
+- **残差对拟合值的散点图**：用于诊断非线性关系。正确的图形中，残差应围绕零水平线均匀波动。
+
+- **标准化残差对杠杆值散点图**：用于识别自变量观测值中的异常值（高杠杆点）以及因变量观测值中的异常值（离群点），并通过Cook距离来识别强影响点。
+
+- **标准化残差绝对值的平方根对拟合值散点图 (Scale-Location)**：用于诊断异方差问题。正确的图形中，标准化残差绝对值的平方根应围绕水平线均匀波动。
+
+- **标准化残差的Q-Q图**：用于检验残差是否服从正态分布。若图中的散点大致呈线性关系，则表明残差近似服从正态分布。
+
+# 近多重共线性对回归系数估计量的影响
+
+- 自变量之间的相关性越强，$\hat{\boldsymbol{\varepsilon}}'_{\mathbf{X}_{(i)}} \hat{\boldsymbol{\varepsilon}}_{\mathbf{X}_{(i)}}$越小，$\hat{\beta}_i$的方差越大。
+- 仅近多重共线的自变量的方差会扩大。
+
+# 方差膨胀因子的定义
+
+方差膨胀因子（VIF）是用于衡量多重共线性的指标。其定义为
+$$
+VIF_i = \frac{SST_i}{\hat{\epsilon}'_{X_{(i)}} \hat{\epsilon}_{X_{(i)}}} = \frac{SST_i}{SSE_i} = \frac{1}{1-R_i^2}
+$$
+其中$R_i^2$为第$i$ 个自变量对其他自变量回归的决定系数。
+
+# $R^2$可否作为模型选择的标准
+
+不行。
+
+局限性：$R^2$会随自变量的增加而单调不减，因而不宜直接用于模型选择。从公式构造来看，$R^2$实际上隐含地采用 $\frac{1}{n}\text{SSE}$来估计误差方差$\sigma^2$。然而，该估计量是有偏估计，无法准确反映模型真实解释能力的提升。因此，有必要对 $R^2$ 进行修正，以纠正上述偏误。
+
+
+# AIC和BIC的异同点
+
+相同点：两者均权衡拟合优度（$L(\hat{\boldsymbol{\theta}})$）和模型复杂度（
+$k$）。\
+不同点：AIC 侧重于**最小化预测误差**；BIC 侧重于**识别真实模型**。
+
+

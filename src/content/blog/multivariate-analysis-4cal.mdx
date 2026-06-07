@@ -4,15 +4,17 @@ description: 包括了（简答题）和（计算题的详解）
 pubDate: 2026-06-06T21:00
 image: https://origin.picgo.net/2026/06/06/download6478aff3537571ff.jpg
 draft: false
-tags: []
+tags:
+  - 多元统计分析
 categories:
   - 期末复习
+badge: ''
 ---
 import Info from "../../components/mdx/Info.astro";
 
 # 一般回归模型和线性回归模型的关系
 
-般回归模型的目标是寻找一个自变量都的函数，使得它在均方误差意义下对**因变量**的预测最优。
+一般回归模型的目标是寻找一个自变量都的函数，使得它在均方误差意义下对**因变量**的预测最优。
 
 而线性回归视为一般线性模型的一个特例。
 
@@ -149,7 +151,7 @@ $$
 
 ![Pasted image 20260606151811](https://origin.picgo.net/2026/06/06/Pasted-image-20260606151811fa03d42fef6be5f3.png)
 
-这个红色的空间就是 $W$，而投影矩阵所做的事就是把 **红色的向量** 投影到 $W$ 这个空间，变为 橙色的节点。
+这个红色的空间就是 $W$，而投影矩阵所做的事就是把 **红色的向量** 投影到 $W$ 这个空间，变为 橙色的向量。
 
 所以对于 $\forall \mathbf{a} = \mathbf{u} + \mathbf{v}: \mathbf{u} \in W, \mathbf{v} \perp W$，有 $\mathbf{P}\mathbf{a} = \mathbf{u}$。，因为v垂直，投影后长度为0。
 
@@ -233,7 +235,8 @@ $$
 1. 由 $\mathbf{Y} = \hat{\mathbf{Y}} + (\mathbf{Y} - \hat{\mathbf{Y}})$及投影的性质，有$\mathbf{Y}'\mathbf{Y} = \hat{\mathbf{Y}}'\hat{\mathbf{Y}} + (\mathbf{Y} - \hat{\mathbf{Y}})'(\mathbf{Y} - \hat{\mathbf{Y}})$
 
 2. 由 $\mathbf{Y} - \mathbf{1}\overline{Y} = (\hat{\mathbf{Y}} - \mathbf{1}\overline{Y}) + (\mathbf{Y} - \hat{\mathbf{Y}})$及投影的性质，有
-$$\underbrace{(\mathbf{Y} - \mathbf{1}\overline{Y})'(\mathbf{Y} - \mathbf{1}\overline{Y})}_{\text{总平方和（SST）}} = \underbrace{(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})'(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})}_{\text{回归平方和（SSR）}} + \underbrace{(\mathbf{Y} - \hat{\mathbf{Y}})'(\mathbf{Y} - \hat{\mathbf{Y}})}_{\text{残差平方和（SSE）}}
+$$
+\underbrace{(\mathbf{Y} - \mathbf{1}\overline{Y})'(\mathbf{Y} - \mathbf{1}\overline{Y})}_{\text{总平方和（SST）}} = \underbrace{(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})'(\hat{\mathbf{Y}} - \mathbf{1}\overline{Y})}_{\text{回归平方和（SSR）}} + \underbrace{(\mathbf{Y} - \hat{\mathbf{Y}})'(\mathbf{Y} - \hat{\mathbf{Y}})}_{\text{残差平方和（SSE）}}
 $$
 
 
@@ -423,7 +426,7 @@ $$
 $$
 
 其中：
-- $\operatorname{Cov}(\mathbf{A}'\mathbf{Y} \mid \mathbf{X}) = \mathbf{A}' \operatorname{Cov}(\mathbf{Y} \mid \mathbf{X}) \mathbf{A}$ 这是一个运算法则，左乘原矩阵，右乘矩阵的转置。
+- $\operatorname{Cov}(\mathbf{A}'\mathbf{Y} \mid \mathbf{X}) = \mathbf{A}' \operatorname{Cov}(\mathbf{Y} \mid \mathbf{X}) \mathbf{A}$ 这是一个运算法则，左乘矩阵的转置，右乘原矩阵。
 - 模型为$\boldsymbol{Y} = \boldsymbol{X}\beta + \varepsilon$，在给定 $\boldsymbol{X}$ 的条件下， $\boldsymbol{X}\beta$ 是常数，所以$\operatorname{Cov}(\boldsymbol{Y},\boldsymbol{Y} \mid \boldsymbol{X}) = \operatorname{Cov}(\varepsilon,\varepsilon \mid \boldsymbol{X})$
 
 

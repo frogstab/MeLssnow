@@ -8,6 +8,7 @@ tags:
   - 多元统计分析
 categories:
   - 期末复习
+badge: ''
 ---
 # 主成分分析的定义。
 
@@ -237,7 +238,8 @@ $$
 # 例题
 
 在正交因子模型中，为了便于解释，因子载荷 $\boldsymbol{L}$往往需要进行正交旋转，即
-$$\boldsymbol{X} = \boldsymbol{LF} + \boldsymbol{\varepsilon} = (\boldsymbol{LT})(\boldsymbol{T}'\boldsymbol{F}) + \boldsymbol{\varepsilon} = \boldsymbol{L}^* \boldsymbol{F}^* + \boldsymbol{\varepsilon}
+$$
+\boldsymbol{X} = \boldsymbol{LF} + \boldsymbol{\varepsilon} = (\boldsymbol{LT})(\boldsymbol{T}'\boldsymbol{F}) + \boldsymbol{\varepsilon} = \boldsymbol{L}^* \boldsymbol{F}^* + \boldsymbol{\varepsilon}
 $$
 其中，$\boldsymbol{T}$ 为正交矩阵。证明：
 

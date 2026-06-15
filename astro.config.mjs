@@ -1,3 +1,4 @@
+import rehypeCodeGroup from 'rehype-code-group';
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
@@ -219,7 +220,7 @@ export default defineConfig({
       ],
     },
     remarkPlugins: [remarkMath, remarkReadingTime],
-    rehypePlugins: [rehypeKatex, [
+    rehypePlugins: [rehypeCodeGroup,rehypeKatex, [
       rehypeExternalLinks,
       {
         content: { type: "text", value: "↗" },

@@ -17,7 +17,7 @@ You are supposed to write for the Postgraduates' Association a notice to recruit
 
 
 <audio controls>
-  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -41,7 +41,7 @@ Write a letter to a friend of yours to
 2) give reasons for your recommendation.
 
 <audio controls>
-  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 

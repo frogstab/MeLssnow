@@ -7,6 +7,7 @@ image: >-
 draft: false
 tags: []
 categories: []
+badge: ''
 ---
 # 2010年英一小作文（通知）
 
@@ -16,7 +17,7 @@ You are supposed to write for the Postgraduates' Association a notice to recruit
 
 
 <audio controls>
-  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav?e=1789218882&token=t27iv5jKCOzHeyWlQt0OqdWi6MWVbYGKfIn4eMSI:EHm0KGnxbG6mW6A7CKlNsDNTGec=" type="audio/mpeg">
+  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -40,7 +41,7 @@ Write a letter to a friend of yours to
 2) give reasons for your recommendation.
 
 <audio controls>
-  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav?e=1789220325&token=t27iv5jKCOzHeyWlQt0OqdWi6MWVbYGKfIn4eMSI:x0mMKiS6klgtQzWiY8o_U_EQwTk=" type="audio/mpeg">
+  <source src="http://tl95cfwya.hn-bkt.clouddn.com/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 

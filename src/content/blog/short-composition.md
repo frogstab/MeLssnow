@@ -9,6 +9,26 @@ tags: []
 categories: []
 badge: ''
 ---
+<style>
+/* ===== 所有 feat 相关样式，写一次 ===== */
+.feat-line { display:flex; align-items:center; gap:4px; margin:12px 0; font-family:-apple-system,'Segoe UI',sans-serif; font-size:15px; }
+.feat-tag {
+  font-weight:700; font-style:italic; color:#b9a5ff;
+  padding:2px; border-radius:6px;
+  text-shadow: 0 0 4px #7b5cff, 0 0 8px #7b5cff, 0 0 16px #7b5cff, 0 0 32px #9d7bff;
+}
+.feat-link {
+  font-weight:700; color:#fff; text-decoration:none;
+  padding:3px 10px; border-radius:8px;
+  background: linear-gradient(120deg,#7b5cff,#ff6bd6,#46e0ff);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.feat-link:hover {
+  transform: scale(1.08) rotate(-1deg);
+  box-shadow: 0 0 14px rgba(123,92,255,.7);
+}
+</style>
+
 # 2010年英一小作文（通知）
 
 ## Directions:
@@ -21,6 +41,11 @@ You are supposed to write for the Postgraduates' Association a notice to recruit
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
+
+<p class="feat-line">
+  <span class="feat-tag">feat.</span>
+  <a class="feat-link" href="https://baike.baidu.com/item/%E7%BB%B4%E5%B0%94%E6%B1%80/62976196" target="_blank" rel="noopener noreferrer">Vertin</a>
+</p>
 
 In an effort to better students' abilities and enrich their extracurricular activities, the Postgraduates' Association is recruiting volunteers for an international conference on globalization to be held from June 4th to 7th in Peking University.
 

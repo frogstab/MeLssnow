@@ -10,25 +10,93 @@ categories: []
 badge: ''
 ---
 <style>
-/* ===== 所有 feat 相关样式，写一次 ===== */
-.feat-line { display:flex; align-items:center; gap:4px; margin:12px 0; font-family:-apple-system,'Segoe UI',sans-serif; font-size:15px; }
-.feat-tag {
-  font-weight:700; font-style:italic; color:#b9a5ff;
-  padding:2px; border-radius:6px;
-  text-shadow: 0 0 4px #7b5cff, 0 0 8px #7b5cff, 0 0 16px #7b5cff, 0 0 32px #9d7bff;
+.feat-player {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 16px 0; padding: 12px 14px;
+  border-radius: 12px;
+  background: #f7f7fa; border: 1px solid #ececf2;
+  max-width: 480px;
 }
-.feat-link {
-  font-weight:700; color:#fff; text-decoration:none;
-  padding:3px 10px; border-radius:8px;
-  background: linear-gradient(120deg,#7b5cff,#ff6bd6,#46e0ff);
+.feat-player audio { display: none; }
+
+.feat-line {
+  display: flex; align-items: center; gap: 4px;
+  margin: 0; font-size: 15px;
+}
+
+.feat-tag {
+  font-weight: 700; font-style: italic;
+  padding: 2px; border-radius: 6px;
+  color: var(--feat-tag, #d4c4ff);
+  text-shadow:
+    0 0 4px  var(--feat-tag-glow, #7b5cff),
+    0 0 8px  var(--feat-tag-glow, #7b5cff),
+    0 0 16px var(--feat-tag-glow, #7b5cff),
+    0 0 32px var(--feat-tag-glow, #7b5cff);
+}
+
+.feat-btn {
+  font-family: inherit; font-size: 15px; font-weight: 700;
+  color: #fff; border: none; cursor: pointer;
+  padding: 3px 12px; border-radius: 8px;
+  background: var(--feat-bg, linear-gradient(90deg, #7b5cff, #ff6bd6, #46e0ff, #7b5cff));
+  background-size: 200% 100%;
+  background-position: 0% 50%;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.feat-link:hover {
-  transform: scale(1.08) rotate(-1deg);
-  box-shadow: 0 0 14px rgba(123,92,255,.7);
+.feat-btn:hover,
+.feat-btn.is-playing {
+  transform: scale(1.06) rotate(-1deg);
+  box-shadow: 0 0 14px var(--feat-glow, rgba(123, 92, 255, .7));
+  animation: featSweep 2.5s linear infinite;
+}
+@keyframes featSweep {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.feat-progress {
+  position: relative; width: 100%; height: 6px;
+  border-radius: 3px; background: #e6e6ee;
+  cursor: pointer; overflow: hidden;
+}
+.feat-progress-fill {
+  height: 100%; width: 0%; border-radius: 3px;
+  background: var(--feat-bg, linear-gradient(90deg, #7b5cff, #ff6bd6, #46e0ff, #7b5cff));
+  background-size: 200% 100%;
+  transition: width .1s linear;
+}
+
+.feat-meta {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 10px;
+}
+.feat-time {
+  font-size: 12px; color: #888;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.feat-volume {
+  display: flex; align-items: center; gap: 6px; color: #888;
+}
+.feat-volume svg { flex-shrink: 0; display: block; }
+
+.feat-volume-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 72px; height: 4px; border-radius: 2px;
+  background: #e6e6ee; outline: none; cursor: pointer;
+}
+.feat-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--feat-glow, #7b5cff);
+  cursor: pointer; transition: transform .15s ease;
+}
+.feat-volume-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+.feat-volume-slider::-moz-range-thumb {
+  width: 12px; height: 12px; border: none; border-radius: 50%;
+  background: var(--feat-glow, #7b5cff); cursor: pointer;
 }
 </style>
-
 # 2010年英一小作文（通知）
 
 ## Directions:
@@ -37,15 +105,27 @@ You are supposed to write for the Postgraduates' Association a notice to recruit
 
 ## Article
 
-<audio controls preload="none">
-  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
-  您的浏览器不支持音频播放。
-</audio>
-
-<p class="feat-line">
-  <span class="feat-tag">feat.</span>
-  <a class="feat-link" href="https://baike.baidu.com/item/%E7%BB%B4%E5%B0%94%E6%B1%80/62976196" target="_blank" rel="noopener noreferrer">Vertin</a>
-</p>
+<div class="feat-player">
+  <audio preload="none">
+    <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/wav">
+  </audio>
+  <p class="feat-line">
+    <span class="feat-tag">feat.</span>
+    <button class="feat-btn" type="button">Vertin</button>
+  </p>
+  <div class="feat-progress"><div class="feat-progress-fill"></div></div>
+  <div class="feat-meta">
+    <span class="feat-time">0:00 / 0:00</span>
+    <div class="feat-volume">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+      <input class="feat-volume-slider" type="range" min="0" max="1" step="0.01" value="1" aria-label="音量">
+    </div>
+  </div>
+</div>
 
 In an effort to better students' abilities and enrich their extracurricular activities, the Postgraduates' Association is recruiting volunteers for an international conference on globalization to be held from June 4th to 7th in Peking University.
 
@@ -71,7 +151,7 @@ Write a letter to a friend of yours to
 ## Article
 
 <audio controls preload="none">
-  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/wav">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -100,7 +180,7 @@ Some international students are coming to your university. Write them an email i
 ## Article
 
 <audio controls preload="none">
-  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2012%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2012%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/wav">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -129,7 +209,7 @@ You should include the details you think necessary.
 ## Article
 
 <audio controls preload="none">
-  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2013%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2013%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/wav">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -157,7 +237,7 @@ You should include the details you think necessary.
 ## Article
 
 <audio controls preload="none">
-  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2014%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
+  <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2014%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/wav">
   您的浏览器不支持音频播放。
 </audio>
 
@@ -309,3 +389,91 @@ This activity aims at raising money for those kids who have dropped out of schoo
     Zhang Wei
   </div>
 </div>
+
+<script>
+(function () {
+  var palettes = [
+    { bg: 'linear-gradient(90deg,#7b5cff,#ff6bd6,#46e0ff,#7b5cff)', glow: 'rgba(123,92,255,.7)',   tag: '#d4c4ff', tagGlow: '#7b5cff' },
+    { bg: 'linear-gradient(90deg,#ff512f,#dd2476,#ff512f)',          glow: 'rgba(255,81,47,.7)',    tag: '#ffc4a8', tagGlow: '#ff512f' },
+    { bg: 'linear-gradient(90deg,#00c6ff,#0072ff,#00c6ff)',          glow: 'rgba(0,168,255,.7)',    tag: '#a8e4ff', tagGlow: '#00a8ff' },
+    { bg: 'linear-gradient(90deg,#11998e,#38ef7d,#11998e)',          glow: 'rgba(17,153,142,.7)',   tag: '#a8f5c4', tagGlow: '#11998e' },
+    { bg: 'linear-gradient(90deg,#f7971e,#ffd200,#f7971e)',          glow: 'rgba(247,151,30,.7)',   tag: '#ffe0a8', tagGlow: '#f7971e' },
+    { bg: 'linear-gradient(90deg,#8e2de2,#4a00e0,#8e2de2)',          glow: 'rgba(142,45,226,.7)',   tag: '#c8a8ff', tagGlow: '#8e2de2' },
+    { bg: 'linear-gradient(90deg,#ff6a00,#ee0979,#ff6a00)',          glow: 'rgba(255,106,0,.7)',    tag: '#ffc4b0', tagGlow: '#ff6a00' },
+    { bg: 'linear-gradient(90deg,#06beb6,#48b1bf,#06beb6)',          glow: 'rgba(6,190,182,.7)',    tag: '#a8eae4', tagGlow: '#06beb6' },
+    { bg: 'linear-gradient(90deg,#c471ed,#f64f59,#c471ed)',          glow: 'rgba(196,113,237,.7)',  tag: '#f0c4ff', tagGlow: '#c471ed' },
+    { bg: 'linear-gradient(90deg,#2c3e50,#fd746c,#2c3e50)',          glow: 'rgba(253,116,108,.7)',  tag: '#ffc8c0', tagGlow: '#fd746c' },
+    { bg: 'linear-gradient(90deg,#e96443,#904e95,#e96443)',          glow: 'rgba(233,100,67,.7)',   tag: '#e8b4c8', tagGlow: '#e96443' },
+    { bg: 'linear-gradient(90deg,#43cea2,#185a9d,#43cea2)',          glow: 'rgba(67,206,162,.7)',   tag: '#a8e8d4', tagGlow: '#43cea2' }
+  ];
+
+  var allAudios = [];
+
+  document.querySelectorAll('.feat-player').forEach(function (player) {
+    var p = palettes[Math.floor(Math.random() * palettes.length)];
+
+    player.style.setProperty('--feat-bg', p.bg);
+    player.style.setProperty('--feat-glow', p.glow);
+    player.style.setProperty('--feat-tag', p.tag);
+    player.style.setProperty('--feat-tag-glow', p.tagGlow);
+
+    var btn   = player.querySelector('.feat-btn');
+    var audio = player.querySelector('audio');
+    var fill  = player.querySelector('.feat-progress-fill');
+    var bar   = player.querySelector('.feat-progress');
+    var time  = player.querySelector('.feat-time');
+    var vol   = player.querySelector('.feat-volume-slider');
+
+    if (!audio) return;
+    allAudios.push(audio);
+
+    if (btn) {
+      btn.addEventListener('click', function () {
+        if (audio.paused) {
+          allAudios.forEach(function (a) { if (a !== audio) a.pause(); });
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      });
+    }
+
+    audio.addEventListener('play',  function () { if (btn) btn.classList.add('is-playing');    });
+    audio.addEventListener('pause', function () { if (btn) btn.classList.remove('is-playing'); });
+    audio.addEventListener('ended', function () {
+      if (btn) btn.classList.remove('is-playing');
+      if (fill) fill.style.width = '0%';
+    });
+
+    audio.addEventListener('timeupdate', function () {
+      if (!audio.duration) return;
+      if (fill) fill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+      if (time) time.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+    });
+
+    if (bar) {
+      bar.addEventListener('click', function (e) {
+        if (!audio.duration) return;
+        var rect = bar.getBoundingClientRect();
+        var ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        audio.currentTime = ratio * audio.duration;
+      });
+    }
+
+    if (vol) {
+      audio.volume = parseFloat(vol.value);
+      vol.addEventListener('input', function () {
+        audio.volume = parseFloat(vol.value);
+        audio.muted = audio.volume === 0;
+      });
+    }
+  });
+
+  function fmt(s) {
+    if (!isFinite(s)) return '0:00';
+    var m = Math.floor(s / 60);
+    var sec = Math.floor(s % 60);
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+})();
+</script>

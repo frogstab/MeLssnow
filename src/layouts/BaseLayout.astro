@@ -19,6 +19,8 @@ import Banner from "@components/Banner.astro";
 import MobileTOC from "@components/widgets/MobileTOC.astro";
 import GlobalAudio from "@components/widgets/GlobalAudio.astro";
 import Analytics from '@vercel/analytics/astro';
+import '../styles/feat-player.css';
+
 
 const {
   title,
@@ -164,6 +166,11 @@ const bannerSubtitle = pageConfig?.subtitle || "";
 
     <MobileTOC headings={headings} showTOC={showTOC} />
     <GlobalAudio />
+
+    <!-- feat 播放器脚本 -->
+    <script>
+        import '../scripts/feat-player.js';
+    </script>
 
     <!-- 其余脚本保持不变 -->
     <script define:vars={{ SITE_THEME }} is:inline>

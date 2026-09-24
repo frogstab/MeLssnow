@@ -1,0 +1,180 @@
+/* ===== 统一走 daisyUI 变量（v4 和 v5 都兼容） ===== */
+:root {
+    --feat-b2: var(--b2, var(--color-base-200, 0.96 0.01 260));
+    --feat-b3: var(--b3, var(--color-base-300, 0.92 0.01 260));
+    --feat-bc: var(--bc, var(--color-base-content, 0.25 0.02 260));
+
+    /* 新增：给下面用到的随机配色变量一个默认值 */
+    --feat-tag: #d4c4ff;
+    --feat-tag-glow: #7b5cff;
+    --feat-bg: linear-gradient(90deg, #7b5cff, #ff6bd6, #46e0ff, #7b5cff);
+    --feat-glow: rgba(123, 92, 255, .7);
+}
+
+/* ===== 播放器卡片 ===== */
+.feat-player {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 16px 0;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: oklch(var(--feat-b2) / 0.6);
+    border: 1px solid oklch(var(--feat-b3) / 0.7);
+    max-width: 480px;
+    color: oklch(var(--feat-bc));
+    overflow: visible;
+}
+.feat-player audio { display: none; }
+
+/* ===== feat 行 ===== */
+.feat-line {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    font-size: 15px;
+    overflow: visible;
+}
+.feat-wrap { position: relative; display: inline-block; }
+
+/* feat. 文字：浅色主题 */
+.feat-tag {
+    font-weight: 700;
+    font-style: italic;
+    padding: 2px 4px;
+    border-radius: 6px;
+    cursor: default;
+    color: var(--feat-tag-glow, #7b5cff);
+    text-shadow:
+            0 0 2px var(--feat-tag-glow, #7b5cff),
+            0 0 4px rgba(255, 255, 255, .4);
+    transition: filter .2s ease, text-shadow .2s ease;
+}
+.feat-wrap:hover .feat-tag { filter: brightness(1.15); }
+
+/* feat. 文字：深色主题（.on-dark 由 JS 挂） */
+.feat-tag.on-dark {
+    color: var(--feat-tag, #d4c4ff);
+    text-shadow:
+            0 0 4px  var(--feat-tag-glow, #7b5cff),
+            0 0 8px  var(--feat-tag-glow, #7b5cff),
+            0 0 16px var(--feat-tag-glow, #7b5cff),
+            0 0 32px var(--feat-tag-glow, #7b5cff);
+}
+
+/* ===== 悬浮裂隙图 ===== */
+.feat-img-container {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    width: 130px;
+    height: 170px;
+    transform: translate(-50%, 10px) scale(.85);
+    transform-origin: center bottom;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s ease, transform .4s cubic-bezier(.34, 1.56, .64, 1);
+    z-index: 100;
+    content-visibility: auto;
+    contain-intrinsic-size: 130px 170px;
+}
+.feat-wrap:hover .feat-img-container {
+    opacity: 1;
+    transform: translate(-50%, -10px) scale(1);
+}
+.feat-portal { display: block; width: 100%; height: 100%; }
+
+/* ===== 播放按钮 ===== */
+.feat-btn {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 3px 12px;
+    border-radius: 8px;
+    background: var(--feat-bg, linear-gradient(90deg, #7b5cff, #ff6bd6, #46e0ff, #7b5cff));
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    transition: transform .2s ease, box-shadow .2s ease;
+    animation: featSweep 2.5s linear infinite;
+    animation-play-state: paused;
+}
+.feat-btn:hover {
+    transform: scale(1.06) rotate(-1deg);
+    box-shadow: 0 0 14px var(--feat-glow, rgba(123, 92, 255, .7));
+    animation-play-state: running;
+}
+.feat-btn.is-playing {
+    box-shadow: 0 0 10px var(--feat-glow, rgba(123, 92, 255, .5));
+}
+@keyframes featSweep {
+    0%   { background-position:   0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* ===== 进度条 ===== */
+.feat-progress {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: oklch(var(--feat-bc) / 0.15);
+    cursor: pointer;
+    overflow: hidden;
+}
+.feat-progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    background: var(--feat-bg, linear-gradient(90deg, #7b5cff, #ff6bd6, #46e0ff, #7b5cff));
+    background-size: 200% 100%;
+    transition: width .1s linear;
+}
+
+/* ===== 时间 + 音量 ===== */
+.feat-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.feat-time {
+    font-size: 12px;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.feat-volume {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.7;
+}
+.feat-volume svg { flex-shrink: 0; display: block; }
+
+.feat-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 72px;
+    height: 4px;
+    border-radius: 2px;
+    background: oklch(var(--feat-bc) / 0.15);
+    outline: none;
+    cursor: pointer;
+}
+.feat-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--feat-glow, #7b5cff);
+    cursor: pointer;
+    transition: transform .15s ease;
+}
+.feat-volume-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+.feat-volume-slider::-moz-range-thumb {
+    width: 12px; height: 12px; border: none; border-radius: 50%;
+    background: var(--feat-glow, #7b5cff);
+    cursor: pointer;
+}

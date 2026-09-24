@@ -1,0 +1,87 @@
+---
+const {
+    src,
+    name = 'feat.',
+    image,
+    type = 'audio/wav',
+} = Astro.props;
+
+/* 每次渲染生成唯一 id，SVG 的 filter/mask/gradient 不冲突 */
+const uid      = Math.random().toString(36).slice(2, 9);
+const filterId = `featWarp-${uid}`;
+const maskId   = `featMask-${uid}`;
+const shadeId  = `featShade-${uid}`;
+---
+
+<div class="feat-player">
+    <audio preload="none">
+        <source src={src} type={type} />
+    </audio>
+
+    <p class="feat-line">
+    <span class="feat-wrap">
+      <span class="feat-tag">feat.</span>
+      <span class="feat-img-container">
+        <svg class="feat-portal" viewBox="0 0 130 170"
+             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <defs>
+            <filter id={filterId} x="-30%" y="-30%" width="160%" height="160%">
+              <feTurbulence type="fractalNoise"
+                            baseFrequency="0.018 0.024"
+                            numOctaves="2" seed="5" result="noise">
+                <animate attributeName="baseFrequency" dur="8s"
+                         values="0.018 0.024; 0.028 0.018; 0.018 0.024"
+                         repeatCount="indefinite"/>
+              </feTurbulence>
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="16"
+                                 xChannelSelector="R" yChannelSelector="G"
+                                 result="displaced"/>
+              <feGaussianBlur in="displaced" stdDeviation="1.4"/>
+            </filter>
+
+            <mask id={maskId} maskUnits="userSpaceOnUse"
+                  x="0" y="0" width="130" height="170">
+              <ellipse cx="65" cy="85" rx="56" ry="76" fill="#fff"
+                       filter={`url(#${filterId})`}/>
+            </mask>
+
+            <radialGradient id={shadeId} cx="50%" cy="50%" r="55%">
+              <stop offset="0%"   stop-color="#000" stop-opacity="0"/>
+              <stop offset="28%"  stop-color="#000" stop-opacity="0"/>
+              <stop offset="46%"  stop-color="#000" stop-opacity="0.3"/>
+              <stop offset="62%"  stop-color="#000" stop-opacity="0.62"/>
+              <stop offset="76%"  stop-color="#000" stop-opacity="0.86"/>
+              <stop offset="90%"  stop-color="#000" stop-opacity="0.97"/>
+              <stop offset="100%" stop-color="#000" stop-opacity="1"/>
+            </radialGradient>
+          </defs>
+
+          <image href={image} x="0" y="0" width="130" height="170"
+                 preserveAspectRatio="xMidYMid slice"
+                 mask={`url(#${maskId})`}/>
+          <rect x="0" y="0" width="130" height="170"
+                fill={`url(#${shadeId})`} mask={`url(#${maskId})`}/>
+        </svg>
+      </span>
+    </span>
+
+        <button class="feat-btn" type="button">{name}</button>
+    </p>
+
+    <div class="feat-progress"><div class="feat-progress-fill"></div></div>
+
+    <div class="feat-meta">
+        <span class="feat-time">0:00 / 0:00</span>
+        <div class="feat-volume">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+            <input class="feat-volume-slider" type="range"
+                   min="0" max="1" step="0.01" value="1" aria-label="音量"/>
+        </div>
+    </div>
+</div>

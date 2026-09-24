@@ -11,28 +11,31 @@ badge: ''
 ---
 # 2010年英一小作文（通知）
 
-## **Directions:**
+## Directions:
 
 You are supposed to write for the Postgraduates' Association a notice to recruit volunteers for aninternational conference on globalization. The notice should include the basic qualifications for applicantsand other information which you think is relevant.
 
+## Article
 
-<audio controls>
+<audio controls preload="none">
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2010%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
 
-<center>
-Notice
-</center>
-
 In an effort to better students' abilities and enrich their extracurricular activities, the Postgraduates' Association is recruiting volunteers for an international conference on globalization to be held from June 4th to 7th in Peking University.
+
+为了提升学生的能力并丰富他们的课外活动，研究生会现面向全校招募志愿者，协助筹备将于6月4日至7日在北京大学举行的全球化国际会议。
 
 First of all, applicants should be easy-going and have a cheerful personality. In addition, candidates must have outstanding skills at English listening comprehension and the ability to speak both Chinese and English fluently. Finally, students with relevant professional knowledge are preferred.
 
+首先，应聘者应性格随和、开朗乐观。此外，应聘者必须具备出色的英语听力理解能力，并能流利地使用中、英语进行交流。最后，具备相关专业知识的学生将优先考虑。
+
 Those postgraduates who are interested may send your resume to PA@163.com before June 1st. Your applications are welcome.
+
+有兴趣的研究生请于6月1日前将简历发送至 PA@163.com。欢迎踊跃报名。
 <div align="right">the Postgraduates' Association</div>
 
-# 2011年英一小作文（非正式书信）
+# 2011年英一小作文(非正式推荐信)
 
 ## Directions:
 
@@ -40,10 +43,11 @@ Write a letter to a friend of yours to
 1) recommend one of your favorite movies and
 2) give reasons for your recommendation.
 
-<audio controls>
+<audio controls preload="none">
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2011%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
+## Article
 
 Dear Neo,
 
@@ -61,14 +65,15 @@ I am looking forward to your reply. Take care!
   </div>
 </div>
 
-# 2012年英一小作文 (建议信)
+# 2012年英一小作文(正式建议信)
 
 ## Directions:
 Some international students are coming to your university. Write them an email in the name of theStudents' Union to
 1) extend your welcome and
 2) provide some suggestions for their campus life here.
+## Article
 
-<audio controls>
+<audio controls preload="none">
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2012%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
@@ -95,7 +100,9 @@ I do hope vou can have a pleasant, unforgettable study and life here.
 Write an email of about 100 words to a foreign teacher in your college, inviting him/her to be a judgefor the upcoming English speech contest.
 You should include the details you think necessary.
 
-<audio controls>
+## Article
+
+<audio controls preload="none">
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2013%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
@@ -121,7 +128,9 @@ It is widely acknowledged that you are a top expert in this field, so we sincere
 Write a letter of about 100 words to the president of your university, suggesting how to improvestudents' physical condition.
 You should include the details you think necessary.
 
-<audio controls>
+## Article
+
+<audio controls preload="none">
   <source src="https://akgpnyecbq3hp1y7.public.blob.vercel-storage.com/english/2014%20%E5%B9%B4%E8%8B%B1%E4%B8%80%E5%B0%8F%E4%BD%9C%E6%96%87.wav" type="audio/mpeg">
   您的浏览器不支持音频播放。
 </audio>
@@ -138,5 +147,139 @@ I do hope you can take the above suggestions into consideration and thanks in ad
   <div style="display: inline-block; text-align: left;">
     Yours sincerely,<br>
     Li Ming
+  </div>
+</div>
+
+# 2015年英一小作文(非正式推荐信 万能)
+## Directions:
+
+You are going to host a club reading session. Write an email of about 100 words recommending a bookto the club members.
+You should state reasons for your recommendations.
+
+## Article
+
+Dear All the Members,
+
+Here I am writing to recommend a wonderful book to you, the Catcher in the Rye, which is not justconducive to your study, but beneficial to your life as well.
+
+The book tells a story that a boy escapes from the school in order to evade the confusion and bewilderment of his adolescence, which seems to remind us of our own experience. The book conveys to youngsters the life philosophy of "being brave in face of adversity which can help you grow up". What'smore, the beautiful language in this original English book may contribute to your English studies inreading and writing.
+
+I do hope you would enjoy the book and share your opinions in the reading session.
+
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Yours sincerely,<br>
+    Li Ming
+  </div>
+</div>
+
+# 2016年英一小作文(通知)
+## Directions:
+
+Suppose you are a librarian in your university. Write a notice of about 100 words, providing the
+newly-enrolled international students with relevant information about the library.
+
+## Article
+
+<center>Notice</center>
+Welcome to our university! As a librarian, I would like to provide you with some detailed informationabout our library.
+
+Firstly, the university library opens at 8:00 a.m. and closes at 10:00 p.m. from Monday to Friday, butfrom 9:00 a.m. to 9:00 p.m. on weekends. Secondly, if you need to borrow books, bring your student cardand register first at the librarian's office. At most six books can be borrowed once from the library. But keepin mind that you can keep the ，books you borrow for only one week. If you exceed the limited time, somefines should be paid.
+
+If you have any questions about borrowing or returning books, send an email to university@163.com.
+We sincerely hope you all enjoy the study and life in our university.
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Li Ming
+  </div>
+</div>
+
+# 2010年英二小作文(非正式感谢信)
+## Directions:
+
+You have just come back from the U.S. as a member of a Sino-American cultural exchange program.
+Write a letter to your American colleague
+1) to express your thanks for his/her warm reception;
+2) welcome him/her to visit China in due course.
+
+## Article
+
+Dear Tom,
+
+I have been back to China safe and sound. I am writing to extend my deep and genuine gratitude foryour great reception when I engaged in the fruitful program. Plus, your tender care has transformed my firstAmerican trip into a truly unforgettable experience.
+
+I am more than delighted to invite you to join us to celebrate the Spring Festival—Chinese Lunar NewYear so that I can repay your kindness. You can partner with me to have a try in lion dances, which is extremely exciting. And the grand Lantern Festival parade will be bound to impress you. You may restassured that you would enjoy visiting here as I did at your home.
+
+Please allow me to say thanks once again. I look forward to your coming.
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Yours sincerely,<br>
+    Li Ming
+  </div>
+</div>
+
+# 2011年英二小作文(非正式祝贺信)
+## Directions:
+Suppose your cousin Li Ming has just been admitted to a university. Write him/her a letter to:(1) congratulate him/her, and
+(2) give him/her suggestions on how to get prepared for university life.
+## Article
+
+Dear Li Ming,
+
+Thrilling news came to me that you have been smoothly accepted by the highly prestigious PekingUniversity. I am writing to convey my hearty congratulations to you.
+
+Since you will step into college this September, I would like to give some advice on how to gear up foryour approaching university life. Firstly, you are advised to sign up for a training course to polish up youroral English, which will stand you in good stead in various activities. Secondly, you'd better get involved insome voluntary work during the summer break to sharpen your practical abilities and communication skills.
+
+I genuinely hope that everything works out well for you in the days ahead. Wish you a splendid andproductive college life.
+
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Yours truly,<br>
+    Zhang Wei
+  </div>
+</div>
+
+# 2012年英二小作文(正式投诉信)
+## Directions:
+
+Suppose you have found something wrong with the electronic dictionary that you bought from anonline store the other day. Write an email to the customer service center to
+1) make a complaint, and
+2) demand a prompt solution
+## Article
+
+Dear Sir or Madam,
+
+As one of your regular customers, I am writing to complain about the poor quality of the  electronic dictionary purchased in your long-established online store.
+The dictionary is really of great importance in the process of my English learning. Unfortunately, Ihave found that there are several problems. To begin with, the dictionary worked well at first, but ten days later it started making a loud noise every time I turned it on. In addition, some of the keys on the keyboarddo not work. I strongly request that you either send me a new one or refund me in full.
+
+I really appreciate all your assistance in this matter. If you have any problems, don't hesitate to contactme. I am looking forward to your reply at your earliest convenience.（此段过于模板，请变化）
+
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Sincerely yours ,<br>
+    Li Ming
+  </div>
+</div>
+
+# 2013年英二小作文(正式倡议信)
+## Directions:
+
+Suppose your class is to hold a charity sale for kids in need of help. Write your classmates an email to
+1) inform them about the details, and
+2) encourage them to participate
+## Article
+
+Dear Classmates,
+
+I am writing to inform you of a charity sale to be held in the days to come. The detailed arrangementsare as follows.
+
+The charity sale will be held on the playground of our university on May 10th, 2013, and it will start at7:00 a.m., and end at 10 o'clock in the evening. You are advised to bring objects which you are not using,such as books, daily necessities and electronic products. You can sell these stuffs at the price you and thebuyers can accept.
+
+This activity aims at raising money for those kids who have dropped out of school because their familycannot afford the tuition fees. Giving your love is not so much a virtue as a responsibility. I do hope that allof you can take part in this event.
+
+<div style="text-align: right; margin-right: 2em;">
+  <div style="display: inline-block; text-align: left;">
+    Yours truly,<br>
+    Zhang Wei
   </div>
 </div>

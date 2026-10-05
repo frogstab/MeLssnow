@@ -1,5 +1,5 @@
 ---
-title: 大作文合集
+title: 大作文汇总
 description: 考研英语二大作文汇总，正在更新
 pubDate: 2026-10-05T13:16
 image: >-

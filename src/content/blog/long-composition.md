@@ -10,6 +10,7 @@ tags:
   - 作文
 categories:
   - 期末复习
+badge: ''
 ---
 # 2010年英二图表作文
 
@@ -70,19 +71,17 @@ Write your essay on ANSWER SHEET. (15 points)
     font-family: sans-serif;
   }
   .custom-table th, .custom-table td {
-    border: 1px solid #d1d5db;
+    /* 边框改用中灰色，亮暗主题下都能看清 */
+    border: 1px solid #888888; 
     padding: 10px;
-  }
-  .custom-table th {
-    background-color: #fafafa;
-    font-weight: normal;
   }
   /* 斜线表头特殊样式 */
   .diagonal-header {
     position: relative;
     width: 160px;
     height: 60px;
-    background: linear-gradient(to top right, transparent 49.3%, #d1d5db 49.3%, #d1d5db 50.7%, transparent 50.7%);
+    /* 斜线也改为中灰色 */
+    background: linear-gradient(to top right, transparent 49.3%, #888888 49.3%, #888888 50.7%, transparent 50.7%);
   }
   .header-top-right {
     position: absolute;

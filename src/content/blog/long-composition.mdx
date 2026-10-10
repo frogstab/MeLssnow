@@ -77,25 +77,29 @@ Write an essay based on the following table. In your writing you should
 You should write at least 150 words.
 Write your essay on ANSWER SHEET. (15 points)
 
-<style>
+<style>{`
   .custom-table {
     border-collapse: collapse;
     width: 100%;
     text-align: center;
     font-family: sans-serif;
   }
-  .custom-table th, .custom-table td {
-    /* 边框改用中灰色，亮暗主题下都能看清 */
-    border: 1px solid #888888; 
+  .custom-table th,
+  .custom-table td {
+    border: 1px solid #888888;
     padding: 10px;
   }
-  /* 斜线表头特殊样式 */
   .diagonal-header {
     position: relative;
     width: 160px;
     height: 60px;
-    /* 斜线也改为中灰色 */
-    background: linear-gradient(to top right, transparent 49.3%, #888888 49.3%, #888888 50.7%, transparent 50.7%);
+    background: linear-gradient(
+      to top right,
+      transparent 49.3%,
+      #888888 49.3%,
+      #888888 50.7%,
+      transparent 50.7%
+    );
   }
   .header-top-right {
     position: absolute;
@@ -109,16 +113,23 @@ Write your essay on ANSWER SHEET. (15 points)
     left: 10px;
     font-weight: bold;
   }
-</style>
-<div style="text-align: center; font-weight: bold; font-size: 1.1em; margin-bottom: 10px;">
+`}</style>
+<div
+  style={{
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: "1.1em",
+    marginBottom: "10px",
+  }}
+>
   某公司员工工作满意度调查
 </div>
-<table class="custom-table">
+<table className="custom-table">
   <thead>
     <tr>
-      <th class="diagonal-header">
-        <span class="header-top-right">满意度</span>
-        <span class="header-bottom-left">年龄组</span>
+      <th className="diagonal-header">
+        <span className="header-top-right">满意度</span>
+        <span className="header-bottom-left">年龄组</span>
       </th>
       <th>满意</th>
       <th>不清楚</th>
